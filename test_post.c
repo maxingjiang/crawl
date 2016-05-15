@@ -12,10 +12,10 @@ int postUrl(char *filename)
     if (curl)
     {
         curl_easy_setopt(curl, CURLOPT_POST, 1L);
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "input1=123&input2=456&remember=False");
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"cuisineBookId\":\"100\"}");
         //curl_easy_setopt(curl, CURLOPT_PROXY, "10.99.60.201:8080");
-        curl_easy_setopt(curl, CURLOPT_URL, "http://passport.cnblogs.com/(X(1)S(eaccajjo3wecsnpojuhychid))/user/signin?AspxAutoDetectCookieSupport=1");   // 指定url
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
+        curl_easy_setopt(curl, CURLOPT_URL, "http://192.168.88.128:8083/api/user/getcuisine");   
+     curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
         res = curl_easy_perform(curl);
         curl_easy_cleanup(curl);
     }
