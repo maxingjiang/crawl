@@ -1,16 +1,19 @@
 .SUFFIXES: .cpp .o
 CC=g++
-SERVERSRCS=save_http.cpp
+BUILD=$(shell pwd)/bin
+SERVERSRCS=crawl.cpp \
+		readrequest.cpp \
+		main.cpp
 
-SERVEROBJS=$(SERVERSRCS:.c=.o)
-SERVEREXEC=save_http
+SERVEROBJS=$(SERVERSRCS:.cpp=.o)
+SERVEREXEC=crawl
 
-all:$(SERVEROBJS) $(CLIENTOBJS)
+all:$(SERVEROBJS)
 	$(CC) -o $(SERVEREXEC) $(SERVEROBJS) -lcurl -g
 	@echo '-------------ok--------------'
 
 .c.o:
-	$(CC) -o $@ -cpp $< 
+	$(CC) -c -g $< -o $(BUILD)/$@
 
 clean:
 	rm -f $(SERVEROBJS)
