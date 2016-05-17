@@ -1,22 +1,24 @@
 .SUFFIXES: .cpp .o
-CC=g++
-BUILD=$(shell pwd)/bin
-SERVERSRCS=crawl.cpp \
-		readrequest.cpp \
-		main.cpp
+DIR_INC = ./include
+DIR_SRC = ./src
+DIR_OBJ = ./obj
+DIR_BIN = ./bin
 
-SERVEROBJS=$(SERVERSRCS:.cpp=.o)
-SERVEREXEC=crawl
+SRC = $(wildcard ${DIR_SRC}/*.cpp)  
+OBJ = $(patsubst %.cpp,${DIR_OBJ}/%.o,$(notdir ${SRC})) 
 
-all:$(SERVEROBJS)
-	$(CC) -o $(SERVEREXEC) $(SERVEROBJS) -lcurl -g
-	@echo '-------------ok--------------'
+TARGET = main
 
-.c.o:
-	$(CC) -c -g $< -o $(BUILD)/$@
+BIN_TARGET = ${DIR_BIN}/${TARGET}
 
+CC = g++
+CFLAGS = -g -I${DIR_INC}
+
+${BIN_TARGET}:${OBJ}
+	$(CC) $(OBJ)  -o $@ -lcurl
+    
+${DIR_OBJ}/%.o:${DIR_SRC}/%.cpp
+	$(CC) $(CFLAGS) -c  $< -o $@
+.PHONY:clean
 clean:
-	rm -f $(SERVEROBJS)
-	rm -f core*
-
-
+	find ${DIR_OBJ} -name *.o -exec rm -rf {} \;
