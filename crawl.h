@@ -4,18 +4,17 @@
 #include <unistd.h>
 #include <string.h>
 #include <string>
-#include <curl/curl.h>
-#include <curl/easy.h>
 #include <vector>
 
 class crawl
 {
 	public:
-
+                static void clear();
 		std::vector<std::string> split(const  std::string& s, const std::string& delim);
+		std::vector<std::string> split_response_cookie(const  std::string& s);
 		static size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream);
 		static size_t header_callback(char *buffer, size_t size, size_t nitems, void *userdata);
-		void get_body(CURL *curl);
+		void get_body(std::string search_src);
 	public:
 		static std::string m_data_buf;
 		static int m_data_shift;

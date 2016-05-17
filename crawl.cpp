@@ -6,6 +6,31 @@ int crawl::m_data_shift = 0;
 std::string crawl::m_head_buf = "";
 int crawl::m_head_shift = 0;
 
+void crawl::clear()
+{
+    m_data_buf = "";
+    m_data_shift = 0;
+    crawl::m_head_buf = "";
+    m_head_shift = 0;
+}
+
+std::vector<std::string> crawl::split_response_cookie(const  std::string& s)
+{
+    std::vector<std::string> ret = split(m_head_buf, "\n");
+    std::vector<std::string> src;
+    std::vector<std::string>::iterator iter = ret.begin();
+    for(;iter != ret.end(); iter++)
+    {
+        int findpos = (*iter).find(s, 0);
+        if(findpos == 0)
+        {
+            std::cout<<*iter<<std::endl;
+            src.push_back(*iter);
+        }
+    }
+    return src;
+}
+
 std::vector<std::string> crawl::split(const  std::string& s, const std::string& delim)  
 {  
     std::vector<std::string> elems;  
@@ -45,18 +70,17 @@ size_t crawl::header_callback(char *buffer, size_t size, size_t nitems, void *us
     return size * nitems;   
 }
 
-void crawl::get_body(CURL *curl)
+void crawl::get_body(std::string search_src)
 {
-    std::string str2 = "http://www.douguo.com";
-    std::size_t found = m_data_buf.find(str2);
-    if (found!=std::string::npos)
-        std::cout << "first found at: " << found << '\n';
+    //std::size_t found = m_data_buf.find(search_src);
+    //if (found!=std::string::npos)
+        //std::cout << "first found at: " << found << '\n';
     
     std::vector<std::string> ret = split(m_data_buf, "\n");
     std::vector<std::string>::iterator iter = ret.begin();
     for(;iter != ret.end(); iter++)
     {
-	int findpos = (*iter).find(str2, 0);
+	int findpos = (*iter).find(search_src, 0);
 	if(findpos >= 0)
 	    std::cout<<*iter<<std::endl;
     }
