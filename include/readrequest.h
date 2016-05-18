@@ -1,3 +1,6 @@
+#ifndef INCLUDE_READREQUEST_H_
+#define INCLUDE_READREQUEST_H_
+
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -5,6 +8,7 @@
 #include <string.h>
 #include <string>
 #include <vector>
+#include <fstream>
 
 class readConf
 {
@@ -16,3 +20,5 @@ class readConf
 		std::vector<std::string> m_requestconf;
 		std::string m_filename;
 };
+
+#endif /* INCLUDE_READREQUEST_H_ */

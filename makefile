@@ -2,7 +2,7 @@
 DIR_INC = ./include
 DIR_SRC = ./src
 DIR_OBJ = ./obj
-DIR_BIN = ./bin
+DIR_BIN = ./
 
 SRC = $(wildcard ${DIR_SRC}/*.cpp)  
 OBJ = $(patsubst %.cpp,${DIR_OBJ}/%.o,$(notdir ${SRC})) 
@@ -15,7 +15,7 @@ CC = g++
 CFLAGS = -g -I${DIR_INC}
 
 ${BIN_TARGET}:${OBJ}
-	$(CC) $(OBJ)  -o $@ -lcurl
+	$(CC) $(OBJ)  -o $@ -lcurl lib/libjsoncpp.so
     
 ${DIR_OBJ}/%.o:${DIR_SRC}/%.cpp
 	$(CC) $(CFLAGS) -c  $< -o $@

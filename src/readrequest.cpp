@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 #include "readrequest.h"
 using namespace std;
 
@@ -22,8 +21,8 @@ void readConf::readrequest()
     ifstream fin(m_filename.c_str()); 
     while( fin.getline(str,LINE_LENGTH) != NULL)
     {    
-        std::cout << "Read from file: " << str << std::endl;
-	m_requestconf.push_back(str);
+        //std::cout << "Read from file: " << str << std::endl;
+    	m_requestconf.push_back(str);
     }
 	
 }

@@ -1,3 +1,6 @@
+#ifndef INCLUDE_CRAWL_H_
+#define INCLUDE_CRAWL_H_
+
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,3 +26,5 @@ class crawl
 	private:
 
 };
+
+#endif /* INCLUDE_CRAWL_H_ */

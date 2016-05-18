@@ -6,135 +6,121 @@
 #include <string>
 #include "readrequest.h"
 #include "crawl.h"
+#include "test.h"
 #include <curl/curl.h>
 #include <curl/easy.h>
 #include <vector>
+#include "businfo.h"
+#include "getDataFromUrl.h"
+#include <time.h>
+
 using namespace std;
 
-int postUrl(char *filename)
+int main1(int argc, char *argv[])
 {
-    std:;cout<<"post===>\n";
-    CURL *curl;
-    CURLcode res;
-    FILE *fp;
-    if ((fp = fopen(filename, "w")) == NULL)
-        return 0;
-    curl = curl_easy_init();
-    if (curl)
-    {
-        //curl_easy_setopt(curl, CURLOPT_POST, 1L);
-        //curl_easy_setopt(curl, CURLOPT_PROXY, "10.99.60.201:8080");
-        curl_easy_setopt(curl, CURLOPT_POST, 1L);
-        //curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"cuisineBookId\":\"100\"}");
-        //curl_easy_setopt(curl, CURLOPT_URL, "http://192.168.199.128:8080/api/user/getcuisine");
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"userid\":\"101\",\"tel\":\"18612304173\",\"password\":\"123456a\"}");
-        curl_easy_setopt(curl, CURLOPT_URL, "http://192.168.199.128:8080/api/user/login");
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
-        res = curl_easy_perform(curl);
-        curl_easy_cleanup(curl);
-    }
-    fclose(fp);
-    return 1;
-}
+	curl_global_init(CURL_GLOBAL_ALL);
+	CURL *curl;
+	string url = "http://222.85.139.244:1001/BusService/Require_AllRouteData/?TimeStamp=1";
+	businfo bus;
+	int urlrequest = 0;
+	int urlline = 0;
+	time_t tt = time(NULL);
+ 	tm* t1= localtime(&tt);
+ 	char time1[100];
+ 	sprintf(time1, "%d-%02d-%02d %02d:%02d:%02d\n", t1->tm_year + 1900,t1->tm_mon + 1,t1->tm_mday,t1->tm_hour,t1->tm_min,t1->tm_sec);
+	string buslines_src = getBusInfoByUrl(curl, url);
+	vector<busAllLine> buslines = bus.getAllLineInfo(buslines_src);
+	std::vector<busAllLine>::iterator iter = buslines.begin();
+	    //cout<<"request header===>: \n";
+	for(; iter != buslines.end(); iter++)
+	{
+		url = "http://222.85.139.244:1001/BusService/Require_RouteStatData/?RouteID="+iter->lineID;
+		urlline++;
+		buslines_src = getBusInfoByUrl(curl, url);
+		vector<busTerminus> busStations = bus.getBusTerminus(NULL,buslines_src);
+		std::vector<busTerminus>::iterator iter1 = busStations.begin();
+		for(; iter1 != busStations.end(); iter1++)
+		{
+			url = "http://222.85.139.244:1001/BusService/QueryDetail_ByRouteID/?RouteID="+iter1->lineID+"&SegmentID="+iter1->terminusId;
+			urlrequest++;
+			cout<<"<*****url*****>"<<url<<endl;
+			buslines_src = getBusInfoByUrl(curl, url);
+			vector<busPositionInfo> busPositionInfos = bus.getBusPositonInfo(*iter1, buslines_src);
+		}
+	}
+	time_t tt1 = time(NULL);
+ 	tm* t2= localtime(&tt1);
+ 	char time2[100];
+ 	sprintf(time2, "%d-%02d-%02d %02d:%02d:%02d\n", t2->tm_year + 1900,t2->tm_mon + 1,t2->tm_mday,t2->tm_hour,t2->tm_min,t2->tm_sec);
+ 	cout<<time1;
+ 	cout<<time2;
+ 	cout<<"urlrlinenum===>"<<urlline<<endl;
+ 	cout<<"urlrequestnum===>"<<urlrequest<<endl;
 
-int getCCT(char *Url)
-{   
-    CURL *curl;
-    CURLcode res;
-    FILE *fp;
-    crawl cr;
-    cr.clear(); 
-    if ((fp = fopen("post.html", "w")) == NULL)
-        return 0;
-    curl = curl_easy_init();
-    if (curl)
-    {   
-        //curl_easy_setopt(curl, CURLOPT_POST, 1L);
-        //curl_easy_setopt(curl, CURLOPT_PROXY, "10.99.60.201:8080");
-        //curl_easy_setopt(curl, CURLOPT_POST, 1L);
-        curl_easy_setopt(curl, CURLOPT_URL, Url);
-        //curl_easy_setopt(curl, CURLOPT_HEADER, 1L);
-        curl_easy_setopt(curl, CURLOPT_NOBODY, 1L);
-        curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, crawl::header_callback);
-	    //curl_easy_setopt(curl, CURLOPT_HEADERDATA, fp);
-        //curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
-        res = curl_easy_perform(curl);
-        std::cout<<"head===>\n"<<crawl::m_head_buf.size()<<" :\n"<<crawl::m_head_buf<<std::endl;
-        std::vector<std::string> iter_cookie = cr.split_response_cookie("Set-Cookie:");
-        std::vector<std::string>::iterator iter = iter_cookie.begin();
-        FILE *pcookie;
-        if ((pcookie = fopen("cookie.conf", "w")) == NULL)
-            return 0;
-        for(; iter != iter_cookie.end(); iter++)
-        {
-            std::vector<std::string> cookieidsline = cr.split(*iter, ";");
-            std::string cookieidid = (*cookieidsline.begin()).substr(strlen("Set-Cookie: "), (*cookieidsline.begin()).length() - strlen("Set-Cookie: "));
-            cout<<cookieidid<<endl;
-            fprintf(pcookie, "%s\n",cookieidid.c_str());
-        }
-        fclose(pcookie);
-        curl_easy_cleanup(curl);
-    }
-    fclose(fp);
-    return 1;
-}
-
-int getUrl()
-{
-    CURL *curl;
-    crawl cr;
-    cr.clear();
-    curl_global_init(CURL_GLOBAL_ALL);  
-    curl=curl_easy_init();
-    struct curl_slist *headers = NULL;
-    std::string filename = "request.conf";
-    readConf rd(filename);
-    rd.readrequest();
-    std::vector<std::string>::iterator iter = rd.m_requestconf.begin();
-    cout<<"request header===>: \n";
-    for(; iter != rd.m_requestconf.end(); iter++)
-    {
-        cout<<*iter<<endl;
-        //headers = curl_slist_append(headers, (*iter).c_str());
-    }
-
-    filename = "cookie.conf";
-    readConf rd1(filename);
-    rd1.readrequest();
-    std::vector<std::string>::iterator itercookie = rd1.m_requestconf.begin();
-    cout<<"cookie header===>: \n";
-    std::string cookies = "Cookie: ";
-    for(; itercookie != rd1.m_requestconf.end(); itercookie++)
-    {
-        cout<<*itercookie<<endl;
-        cookies = cookies + *itercookie;
-    }
-    cout<<"cookie header end===>: \n";
-    headers = curl_slist_append(headers, cookies.c_str());
-
-    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-    curl_easy_setopt(curl, CURLOPT_URL, "http://user.qzone.qq.com/994513645");  
-    //curl_easy_setopt(curl, CURLOPT_URL, "http://home.cnblogs.com/set/account/");  
-    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10L);
-    //curl_easy_setopt(curl, CURLOPT_URL, "http://www.douguo.com");  
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, crawl::write_data);
-    curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, crawl::header_callback);
-    //curl_easy_setopt(curl, CURLOPT_NOBODY, 1L);
-    curl_easy_perform(curl);
-    //cr.get_body("logo.png");
-    curl_easy_cleanup(curl);
-    std::cout<<"head===>\n"<<cr.m_head_buf.size()<<" :\n"<<cr.m_head_buf<<std::endl;
-    std::cout<<"body===>\n"<<cr.m_data_buf.size()<<" :\n"<<cr.m_data_buf<<std::endl;
-    return 0;
-}
-
-int main(int argc, char *argv[])
-{
-    //getUrl();
-    //char url[] = "http://220.197.219.150:9083/admin/login?userName=yang&password=123456";
-    char url[] = "http://220.197.219.150:9083/admin/login?userName=yang&password=123456";
-    //postUrl(file);
-    //getCCT(url);
-    getUrl();
     exit(0);
+}
+
+int run()
+{
+	curl_global_init(CURL_GLOBAL_ALL);
+	CURL *curl;
+	businfo bus;
+    const int LINE_LENGTH = 2048;
+    char str[LINE_LENGTH];
+    crawl cr;
+    string url, buslines_src;
+    int urlrequest = 0;
+    cr.clear();
+    ifstream fin("conf/busline.conf");
+    while( fin.getline(str,LINE_LENGTH) != NULL)
+    {
+        //std::cout << "Read from file: " << str << std::endl;
+    	std::vector<std::string> buslineinfo = cr.split(str, "---");
+    	url = "http://222.85.139.244:1001/BusService/QueryDetail_ByRouteID/?RouteID="+buslineinfo[0]+"&SegmentID="+buslineinfo[2];
+    	urlrequest++;
+    	cout<<"<*****url*****>"<<url<<endl;
+    	buslines_src = getBusInfoByUrl(curl, url);
+    	vector<busPositionInfo> busPositionInfos = bus.getBusPositonInfo(*iter1, buslines_src);
+    }
+
+}
+
+int writebusline()
+{
+	curl_global_init(CURL_GLOBAL_ALL);
+	CURL *curl;
+	string url = "http://222.85.139.244:1001/BusService/Require_AllRouteData/?TimeStamp=1";
+	businfo bus;
+	int urlrequest = 0;
+	int urlline = 0;
+	time_t tt = time(NULL);
+ 	tm* t1= localtime(&tt);
+ 	char time1[100];
+ 	sprintf(time1, "%d-%02d-%02d %02d:%02d:%02d\n", t1->tm_year + 1900,t1->tm_mon + 1,t1->tm_mday,t1->tm_hour,t1->tm_min,t1->tm_sec);
+
+	string buslines_src = getBusInfoByUrl(curl, url);
+	vector<busAllLine> buslines = bus.getAllLineInfo(buslines_src);
+	std::vector<busAllLine>::iterator iter = buslines.begin();
+	FILE *pbusline;
+	if ((pbusline = fopen("conf/busline.conf", "w")) == NULL)
+	    return 0;
+	for(; iter != buslines.end(); iter++)
+	{
+		url = "http://222.85.139.244:1001/BusService/Require_RouteStatData/?RouteID="+iter->lineID;
+		urlline++;
+		buslines_src = getBusInfoByUrl(curl, url);
+		vector<busTerminus> busStations = bus.getBusTerminus(pbusline, buslines_src);
+
+	}
+	fclose(pbusline);
+	time_t tt1 = time(NULL);
+ 	tm* t2= localtime(&tt1);
+ 	char time2[100];
+ 	sprintf(time2, "%d-%02d-%02d %02d:%02d:%02d\n", t2->tm_year + 1900,t2->tm_mon + 1,t2->tm_mday,t2->tm_hour,t2->tm_min,t2->tm_sec);
+ 	cout<<time1;
+ 	cout<<time2;
+ 	cout<<"urlrlinenum===>"<<urlline<<endl;
+ 	cout<<"urlrequestnum===>"<<urlrequest<<endl;
+
+    return 0;
 }

@@ -10,7 +10,7 @@ void crawl::clear()
 {
     m_data_buf = "";
     m_data_shift = 0;
-    crawl::m_head_buf = "";
+    m_head_buf = "";
     m_head_shift = 0;
 }
 
