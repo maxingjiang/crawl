@@ -1,4 +1,6 @@
 #include <iostream>
+#include <stdio.h>
+#include <string.h>
 #include "crawl.h"
  
 std::string crawl::m_data_buf = "";
@@ -56,9 +58,10 @@ std::vector<std::string> crawl::split(const  std::string& s, const std::string& 
 size_t crawl::write_data(void *ptr, size_t size, size_t nmemb, void *stream)  
 {
     //printf("============\n===========%s\n", (char *)ptr);
-    int res_size = size * nmemb;
-    m_data_buf = m_data_buf + (char *)ptr;
-    m_data_shift += res_size;
+    //int res_size = size * nmemb;
+    //m_data_buf = m_data_buf + (char *)ptr;
+    //m_data_shift += res_size;
+	strcat((char*)stream, (char*)ptr);
     return size * nmemb;
 }
  

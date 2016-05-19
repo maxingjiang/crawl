@@ -14,6 +14,8 @@
 #include <vector>
 #include <stdio.h>
 #include <stdlib.h>
+#include <curl/curl.h>
+#include <curl/easy.h>
 
 using namespace :: std;
 using namespace :: Json;
@@ -65,6 +67,13 @@ struct busPositionInfo
 	string nextStaInfo;
 	pos busPos;
 };
+
+struct threadArgs
+{
+	CURL *curl;
+	busTerminus busterminus;
+};
+
 
 class businfo
 {

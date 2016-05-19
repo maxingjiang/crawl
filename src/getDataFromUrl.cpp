@@ -19,7 +19,7 @@ string getBusInfoByUrl(CURL *curl, string &Url)
         //cout<<*iter<<endl;
         headers = curl_slist_append(headers, (*iter).c_str());
     }
-
+    /*
     filename = "conf/cookie.conf";
     readConf rd1(filename);
     rd1.readrequest();
@@ -33,19 +33,18 @@ string getBusInfoByUrl(CURL *curl, string &Url)
     }
     //cout<<"cookie header end===>: \n";
     headers = curl_slist_append(headers, cookies.c_str());
-
+	*/
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
     curl_easy_setopt(curl, CURLOPT_URL, Url.c_str());
-    //curl_easy_setopt(curl, CURLOPT_URL, "http://home.cnblogs.com/set/account/");
     curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10L);
-    //curl_easy_setopt(curl, CURLOPT_URL, "http://www.douguo.com");
+    char buffer[1000000] = {0x0};
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, crawl::write_data);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, buffer);
     curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, crawl::header_callback);
     //curl_easy_setopt(curl, CURLOPT_NOBODY, 1L);
     curl_easy_perform(curl);
-    //cr.get_body("logo.png");
     curl_easy_cleanup(curl);
     //std::cout<<"head===>\n"<<cr.m_head_buf.size()<<" :\n"<<cr.m_head_buf<<std::endl;
-    //std::cout<<"body===>\n"<<cr.m_data_buf.size()<<" :\n"<<cr.m_data_buf<<std::endl;
-    return cr.m_data_buf;
+    //std::cout<<"body===>\n"<<buffer<<std::endl;
+    return buffer;
 }

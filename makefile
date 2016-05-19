@@ -15,7 +15,7 @@ CC = g++
 CFLAGS = -g -I${DIR_INC}
 
 ${BIN_TARGET}:${OBJ}
-	$(CC) $(OBJ)  -o $@ -lcurl lib/libjsoncpp.so
+	$(CC) $(OBJ)  -o $@ -lcurl lib/libjsoncpp.so -lpthread
     
 ${DIR_OBJ}/%.o:${DIR_SRC}/%.cpp
 	$(CC) $(CFLAGS) -c  $< -o $@
