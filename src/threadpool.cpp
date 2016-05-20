@@ -74,17 +74,17 @@ void *thread_routine (void *arg)
     while (1) {  
         pthread_mutex_lock (&(pool->queue_lock));  
         while (pool->cur_queue_size == 0 && !pool->shutdown) {  
-            //printf ("thread 0x%lu is waiting\n", (unsigned long)pthread_self ());
+            printf ("thread 0x%lu is waiting\n", (unsigned long)pthread_self ());
             pthread_cond_wait (&(pool->queue_ready), &(pool->queue_lock));  
         }  
   
         if (pool->shutdown) {  
             pthread_mutex_unlock (&(pool->queue_lock));  
-            //printf ("thread 0x%lu will exit\n", (unsigned long)pthread_self ());
+            printf ("thread 0x%lu will exit\n", (unsigned long)pthread_self ());
             pthread_exit (NULL);  
         }  
   
-        //printf ("thread 0x%lu is starting to work\n", (unsigned long)pthread_self ());
+        printf ("thread 0x%lu is starting to work\n", (unsigned long)pthread_self ());
         assert (pool->cur_queue_size != 0);  
         assert (pool->queue_head != NULL);  
   

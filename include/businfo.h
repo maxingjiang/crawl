@@ -72,6 +72,8 @@ struct threadArgs
 {
 	CURL *curl;
 	busTerminus busterminus;
+	string ip;
+	int port;
 };
 
 

@@ -16,9 +16,9 @@ void crawl::clear()
     m_head_shift = 0;
 }
 
-std::vector<std::string> crawl::split_response_cookie(const  std::string& s)
+std::vector<std::string> crawl::split_response_cookie(std::string source, const  std::string& s)
 {
-    std::vector<std::string> ret = split(m_head_buf, "\n");
+    std::vector<std::string> ret = split(source, "\n");
     std::vector<std::string> src;
     std::vector<std::string>::iterator iter = ret.begin();
     for(;iter != ret.end(); iter++)
@@ -67,18 +67,12 @@ size_t crawl::write_data(void *ptr, size_t size, size_t nmemb, void *stream)
  
 size_t crawl::header_callback(char *buffer, size_t size, size_t nitems, void *userdata)
 {
-    int res_size = size * nitems;
-    m_head_buf = m_head_buf + buffer;
-    m_head_shift += res_size;
+	strcat((char*)userdata, (char*)buffer);
     return size * nitems;   
 }
 
 void crawl::get_body(std::string search_src)
 {
-    //std::size_t found = m_data_buf.find(search_src);
-    //if (found!=std::string::npos)
-        //std::cout << "first found at: " << found << '\n';
-    
     std::vector<std::string> ret = split(m_data_buf, "\n");
     std::vector<std::string>::iterator iter = ret.begin();
     for(;iter != ret.end(); iter++)

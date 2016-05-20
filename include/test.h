@@ -21,14 +21,14 @@
 #include <vector>
 using namespace std;
 
-int postUrl(char *filename);
+int postUrl();
 
-int getCCT(char *Url);
+int getCCT();
 
 int getUrl();
 
 void setBusInfo();
 
-
+string testgetBusInfoByUrl(CURL *curl, string &Url);
 
 #endif /* INCLUDE_TEST_H_ */

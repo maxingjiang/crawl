@@ -14,7 +14,7 @@ class crawl
 	public:
                 static void clear();
 		std::vector<std::string> split(const  std::string& s, const std::string& delim);
-		std::vector<std::string> split_response_cookie(const  std::string& s);
+		std::vector<std::string> split_response_cookie(std::string source, const  std::string& s);
 		static size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream);
 		static size_t header_callback(char *buffer, size_t size, size_t nitems, void *userdata);
 		void get_body(std::string search_src);
