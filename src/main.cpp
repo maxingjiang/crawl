@@ -76,17 +76,19 @@ int run1()
     }
     int urllines = threadargss.size();
     cout<<"urllines===>"<<urllines<<endl;
-    pool_init (5);
+    threadpool tpool;
+    tpool.pool_init (5);
     for (int i = 0; i < urllines; i++) {
-        pool_add_worker (run, &threadargss[i]);
+        tpool.pool_add_worker (run, &threadargss[i]);
     }
-    sleep(2);
+    //sleep(2);
     while(1)
     {
-    	if(pool->cur_queue_size == 0)
+        sleep(2);
+    	if(tpool.pool->cur_queue_size == 0)
     	{
     		cout<<"===========exit\n";
-    		pool_destroy ();
+    		tpool.pool_destroy ();
     		break;
     	}
     	continue;

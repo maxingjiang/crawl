@@ -1,6 +1,7 @@
 #include "threadpool.h" 
   
-void pool_init (int max_thread_num)  
+CThread_pool *threadpool::pool = NULL; 
+void threadpool::pool_init (int max_thread_num)  
 {  
     pool = (CThread_pool *) malloc (sizeof(CThread_pool));  
     pthread_mutex_init (&(pool->queue_lock), NULL);  
@@ -20,7 +21,7 @@ void pool_init (int max_thread_num)
     }  
 }  
   
-int pool_add_worker (void *(*process) (void *arg), void*arg)  
+int threadpool::pool_add_worker (void *(*process) (void *arg), void*arg)  
 {  
     CThread_worker *newworker = (CThread_worker *) malloc (sizeof(CThread_worker));  
     newworker->process = process;  
@@ -44,7 +45,7 @@ int pool_add_worker (void *(*process) (void *arg), void*arg)
     return 0;  
 }  
   
-int pool_destroy ()  
+int threadpool::pool_destroy ()  
 {  
     if (pool->shutdown)  
         return -1;  
@@ -68,7 +69,7 @@ int pool_destroy ()
     return 0;  
 }  
   
-void *thread_routine (void *arg)  
+void *threadpool::thread_routine (void *arg)  
 {  
     printf ("starting thread 0x%x\n", (unsigned int)pthread_self ());  
     while (1) {  
