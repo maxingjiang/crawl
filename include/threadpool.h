@@ -22,6 +22,7 @@ typedef struct
     int max_thread_num;  
     int cur_queue_size;  
 } CThread_pool;  
+
 class threadpool
 {
 public:

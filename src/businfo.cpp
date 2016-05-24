@@ -4,6 +4,7 @@
  *  Created on: May 17, 2016
  *      Author: mxj
  */
+
 #include "businfo.h"
 #include<iomanip>
 
@@ -98,8 +99,8 @@ vector<busStation> businfo::getBusStation(string &src)
 				{
 					lineStationInfo.stationID = stationList[station]["StationID"].asString();
 					lineStationInfo.stationName = stationList[station]["StationName"].asString();
-					lineStationInfo.stationPos.Latitude = stationList[station]["StationPostion"]["Latitude"].asFloat();
-					lineStationInfo.stationPos.Longitude = stationList[station]["StationPostion"]["Longitude"].asFloat();
+					lineStationInfo.stationPos.Latitude = stationList[station]["StationPostion"]["Latitude"].asDouble();
+					lineStationInfo.stationPos.Longitude = stationList[station]["StationPostion"]["Longitude"].asDouble();
 					/*cout<<lineStationInfo.lineID<<"=>"<<lineStationInfo.lineName<<"=>"<<lineStationInfo.terminusId
 							<<"=>"<<lineStationInfo.terminusName<<"=>"<<lineStationInfo.stationID<<"=>"<<lineStationInfo.stationName
 							<<"=>"<<lineStationInfo.stationPos.Latitude<<"=>"<<lineStationInfo.stationPos.Longitude<<endl;*/
@@ -174,8 +175,8 @@ vector<busPositionInfo> businfo::getBusPositonInfo(busTerminus lineStationInfo, 
 				busPosition.arriveTime = BusPosList[BusPosNum]["ArriveTime"].asString();
 				busPosition.arriveStaInfo = BusPosList[BusPosNum]["ArriveStaInfo"].asString();
 				busPosition.nextStaInfo = BusPosList[BusPosNum]["NextStaInfo"].asString();
-				busPosition.busPos.Latitude = BusPosList[BusPosNum]["BusPostion"]["Latitude"].asFloat();
-				busPosition.busPos.Longitude = BusPosList[BusPosNum]["BusPostion"]["Longitude"].asFloat();
+				busPosition.busPos.Latitude = BusPosList[BusPosNum]["BusPostion"]["Latitude"].asDouble();
+				busPosition.busPos.Longitude = BusPosList[BusPosNum]["BusPostion"]["Longitude"].asDouble();
 
 				cout<<busPosition.lineID<<"=>"<<busPosition.lineName;
 				cout<<setprecision(8)<<"=>"<<busPosition.terminusId<<"=>"<<busPosition.terminusName;
@@ -189,6 +190,68 @@ vector<busPositionInfo> businfo::getBusPositonInfo(busTerminus lineStationInfo, 
 	return busPositions;
 }
 
+LineIdAndTerminusId businfo::getLineIdAndTerminusId(string &src)
+{
+	Json::Reader reader;
+	Json::Value value;
+	LineIdAndTerminusId ids;
 
+	if (reader.parse(src, value))
+	{
+		string lineID = value["lineID"].asString();
+		string terminusId = value["terminusId"].asString();
+		//cout<<"lineid: "<<lineID<<" , terminusId: "<<terminusId<<endl;
+		ids.lineID = lineID;
+		ids.terminusId = terminusId;
+	}
+	return ids;
+}
+
+string businfo::setJsonSrcs(vector<busPositionInfo> busPositionInfos)
+{
+    Json::Value root;
+    Json::Value arrayObj;
+    Json::Value item;
+    for (int i=0; i<busPositionInfos.size(); i++)
+    {
+    	item["lineID"] = busPositionInfos[i].lineID;
+    	item["lineName"] = busPositionInfos[i].lineName;
+    	item["terminusId"] = busPositionInfos[i].terminusId;
+    	item["terminusName"] = busPositionInfos[i].terminusName;
+    	item["busId"] = busPositionInfos[i].busId;
+    	item["arriveTime"] = busPositionInfos[i].arriveTime;
+    	item["arriveStaInfo"] = busPositionInfos[i].arriveStaInfo;
+    	item["nextStaInfo"] = busPositionInfos[i].nextStaInfo;
+    	item["busPos"]["Latitude"] = busPositionInfos[i].busPos.Latitude;
+    	item["busPos"]["Longitude"] = busPositionInfos[i].busPos.Longitude;
+    	arrayObj.append(item);
+    }
+
+    root["BusPosList"] = arrayObj;
+    root.toStyledString();
+    std::string src = root.toStyledString();
+    //std::cout << src << std::endl;
+    return src;
+}
+
+string businfo::setJsonSrc(busPositionInfo busPositionInfos)
+{
+    Json::Value item;
+
+    item["lineID"] = busPositionInfos.lineID;
+    item["lineName"] = busPositionInfos.lineName;
+    item["terminusId"] = busPositionInfos.terminusId;
+    item["terminusName"] = busPositionInfos.terminusName;
+    item["busId"] = busPositionInfos.busId;
+    item["arriveTime"] = busPositionInfos.arriveTime;
+    item["arriveStaInfo"] = busPositionInfos.arriveStaInfo;
+    item["nextStaInfo"] = busPositionInfos.nextStaInfo;
+    item["busPos"]["Latitude"] = busPositionInfos.busPos.Latitude;
+    item["busPos"]["Longitude"] = busPositionInfos.busPos.Longitude;
+
+    std::string src = item.toStyledString();
+    //std::cout << src << std::endl;
+    return src;
+}
 
 

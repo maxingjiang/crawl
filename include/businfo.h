@@ -23,20 +23,26 @@ using std::string;
 
 struct pos
 {
-	float Latitude;
-	float Longitude;
+	double Latitude;
+	double Longitude;
 };
 
 struct busAllLine
 {
-	string lineID;
+    string lineID;
     string lineName;
+};
+
+struct LineIdAndTerminusId
+{
+    string lineID;
+    string terminusId;
 };
 
 struct busStation
 {
-	string lineID;
-	string lineName;
+    string lineID;
+    string lineName;
     string terminusId;
     string terminusName;
     string stationID;
@@ -46,8 +52,8 @@ struct busStation
 
 struct busTerminus
 {
-	string lineID;
-	string lineName;
+    string lineID;
+    string lineName;
     string terminusId;
     string terminusName;
 };
@@ -94,7 +100,9 @@ class businfo
 
 		vector<busPositionInfo> getBusPositonInfo(busTerminus lineStationInfo, string &src); //get pos info of bus
 
-
+		LineIdAndTerminusId getLineIdAndTerminusId(string &src); //get line id and terminus id
+		string setJsonSrcs(vector<busPositionInfo> busPositionInfos); //set struct to json string
+		string setJsonSrc(busPositionInfo busPositionInfos); //set struct to json string
 
 
 	public:

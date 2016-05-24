@@ -12,7 +12,7 @@
 class crawl
 {
 	public:
-                static void clear();
+        static void clear();
 		std::vector<std::string> split(const  std::string& s, const std::string& delim);
 		std::vector<std::string> split_response_cookie(std::string source, const  std::string& s);
 		static size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream);

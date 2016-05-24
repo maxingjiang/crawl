@@ -27,7 +27,7 @@ struct ip_port
 class ProxyIP
 {
 	public:
-	ProxyIP(std::string filename);
+		ProxyIP(std::string filename);
 		~ProxyIP();
 		vector<ip_port> readProxy();
 	public:
