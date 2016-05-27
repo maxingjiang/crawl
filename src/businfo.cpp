@@ -7,6 +7,16 @@
 
 #include "businfo.h"
 #include<iomanip>
+#include <sstream>
+#include <pthread.h>
+#include "crawl.h"
+#include "getProxy.h"
+#include "getDataFromUrl.h"
+#include "threadpool.h"
+
+pthread_mutex_t BACK_COMM_mutex = PTHREAD_MUTEX_INITIALIZER ;
+vector< vector<busPositionInfo> > busLists::buslist;
+vector<threadArgs> busLists::threadargss;
 
 void businfo::clearInfo()
 {
@@ -20,8 +30,8 @@ void businfo::clearInfo()
 	bus.arriveTime = "";
 	bus.arriveStaInfo = "";
 	bus.nextStaInfo = "";
-	bus.busPos.Latitude = 0.0;
-	bus.busPos.Longitude = 0.0;
+	bus.Latitude = 0.0;
+	bus.Longitude = 0.0;
 }
 
 void businfo::setInfo(string lineID, string lineName, string terminusId, string terminusName,
@@ -38,8 +48,8 @@ void businfo::setInfo(string lineID, string lineName, string terminusId, string 
 	bus.arriveTime = arriveTime;
 	bus.arriveStaInfo = arriveStaInfo;
 	bus.nextStaInfo = nextStaInfo;
-	bus.busPos.Latitude = Latitude;
-	bus.busPos.Longitude = Longitude;
+	bus.Latitude = Latitude;
+	bus.Longitude = Longitude;
 }
 
 vector<busAllLine> businfo::getAllLineInfo(string &src)
@@ -104,7 +114,6 @@ vector<busStation> businfo::getBusStation(string &src)
 					/*cout<<lineStationInfo.lineID<<"=>"<<lineStationInfo.lineName<<"=>"<<lineStationInfo.terminusId
 							<<"=>"<<lineStationInfo.terminusName<<"=>"<<lineStationInfo.stationID<<"=>"<<lineStationInfo.stationName
 							<<"=>"<<lineStationInfo.stationPos.Latitude<<"=>"<<lineStationInfo.stationPos.Longitude<<endl;*/
-
 					busstation.push_back(lineStationInfo);
 				}
 			}
@@ -175,14 +184,14 @@ vector<busPositionInfo> businfo::getBusPositonInfo(busTerminus lineStationInfo, 
 				busPosition.arriveTime = BusPosList[BusPosNum]["ArriveTime"].asString();
 				busPosition.arriveStaInfo = BusPosList[BusPosNum]["ArriveStaInfo"].asString();
 				busPosition.nextStaInfo = BusPosList[BusPosNum]["NextStaInfo"].asString();
-				busPosition.busPos.Latitude = BusPosList[BusPosNum]["BusPostion"]["Latitude"].asDouble();
-				busPosition.busPos.Longitude = BusPosList[BusPosNum]["BusPostion"]["Longitude"].asDouble();
+				busPosition.Latitude = BusPosList[BusPosNum]["BusPostion"]["Latitude"].asDouble();
+				busPosition.Longitude = BusPosList[BusPosNum]["BusPostion"]["Longitude"].asDouble();
 
 				cout<<busPosition.lineID<<"=>"<<busPosition.lineName;
 				cout<<setprecision(8)<<"=>"<<busPosition.terminusId<<"=>"<<busPosition.terminusName;
 				cout<<setprecision(8)<<"=>"<<busPosition.busId<<"=>"<<busPosition.arriveTime;
-				cout<<setprecision(8)<<"=>"<<busPosition.arriveStaInfo<<"=>"<<busPosition.nextStaInfo<<"=>"<<busPosition.busPos.Latitude;
-				cout<<setprecision(8)<<"=>"<<busPosition.busPos.Longitude<<endl;
+				cout<<setprecision(8)<<"=>"<<busPosition.arriveStaInfo<<"=>"<<busPosition.nextStaInfo<<"=>"<<busPosition.Latitude;
+				cout<<setprecision(8)<<"=>"<<busPosition.Longitude<<endl;
 				busPositions.push_back(busPosition);
 
 			}
@@ -222,12 +231,57 @@ string businfo::setJsonSrcs(vector<busPositionInfo> busPositionInfos)
     	item["arriveTime"] = busPositionInfos[i].arriveTime;
     	item["arriveStaInfo"] = busPositionInfos[i].arriveStaInfo;
     	item["nextStaInfo"] = busPositionInfos[i].nextStaInfo;
-    	item["busPos"]["Latitude"] = busPositionInfos[i].busPos.Latitude;
-    	item["busPos"]["Longitude"] = busPositionInfos[i].busPos.Longitude;
+    	item["Latitude"] = busPositionInfos[i].Latitude;
+    	item["Longitude"] = busPositionInfos[i].Longitude;
     	arrayObj.append(item);
     }
 
     root["BusPosList"] = arrayObj;
+    root.toStyledString();
+    std::string src = root.toStyledString();
+    //std::cout << src << std::endl;
+    return src;
+}
+
+string businfo::mergeJsonSrcs(vector<vector<busPositionInfo> > busPositionInfos)
+{
+    Json::Value root;
+    Json::Value arrayline;
+    for (int i=0; i<busPositionInfos.size(); i++)
+    {
+    	string src;
+    	Json::Value item;
+    	Json::Value arraybus;
+    	for (int j=0; j<busPositionInfos[i].size(); j++)
+    	{/*
+        	item["lId"] = busPositionInfos[i][j].lineID;
+        	item["lName"] = busPositionInfos[i][j].lineName;
+        	item["tId"] = busPositionInfos[i][j].terminusId;
+        	item["tName"] = busPositionInfos[i][j].terminusName;
+        	item["busId"] = busPositionInfos[i][j].busId;
+        	item["Time"] = busPositionInfos[i][j].arriveTime;
+        	item["arrSta"] = busPositionInfos[i][j].arriveStaInfo;
+        	item["nextSta"] = busPositionInfos[i][j].nextStaInfo;
+        	item["Lat"] = busPositionInfos[i][j].Latitude;
+        	item["Lon"] = busPositionInfos[i][j].Longitude;
+        	*/
+    		string strlon, strlat;
+    		stringstream sslon, sslat;
+    		sslon<<busPositionInfos[i][j].Longitude;
+    		sslon>>strlon;
+    		sslat<<busPositionInfos[i][j].Latitude;
+    		sslat>>strlat;
+        	src = busPositionInfos[i][j].lineID+"=>"+busPositionInfos[i][j].lineName+"=>"+busPositionInfos[i][j].terminusId+"=>"+
+        			busPositionInfos[i][j].terminusName+"=>"+busPositionInfos[i][j].busId+"=>"+busPositionInfos[i][j].arriveTime+"=>"+
+				busPositionInfos[i][j].arriveStaInfo+"=>"+busPositionInfos[i][j].nextStaInfo+"=>"
+				+strlat+"=>"+strlon;
+        	item["lName"] = src;
+        	arraybus.append(item);
+    	}
+
+    	arrayline.append(arraybus);
+    }
+    root["BusPosList"] = arrayline;
     root.toStyledString();
     std::string src = root.toStyledString();
     //std::cout << src << std::endl;
@@ -246,12 +300,112 @@ string businfo::setJsonSrc(busPositionInfo busPositionInfos)
     item["arriveTime"] = busPositionInfos.arriveTime;
     item["arriveStaInfo"] = busPositionInfos.arriveStaInfo;
     item["nextStaInfo"] = busPositionInfos.nextStaInfo;
-    item["busPos"]["Latitude"] = busPositionInfos.busPos.Latitude;
-    item["busPos"]["Longitude"] = busPositionInfos.busPos.Longitude;
+    item["Latitude"] = busPositionInfos.Latitude;
+    item["Longitude"] = busPositionInfos.Longitude;
 
     std::string src = item.toStyledString();
     //std::cout << src << std::endl;
     return src;
+}
+
+vector<threadArgs> businfo::getArgsForThread()
+{
+    CURL *curl;
+    const int LINE_LENGTH = 2048;
+    char str[LINE_LENGTH];
+    crawl cr;
+    cr.clear();
+    vector<threadArgs> threadargss;
+    ifstream fin("conf/busline.conf");
+    ProxyIP ip("conf/proxy.conf");
+    vector<ip_port> ips = ip.readProxy();
+    int ips_length = ips.size();
+    int ipnum = 0;
+    while( fin.getline(str,LINE_LENGTH) != NULL)
+    {
+        //std::cout << "Read from file: " << str << std::endl;
+    	std::vector<std::string> buslineinfo = cr.split(str, "---");
+    	threadArgs threadargs;
+    	threadargs.curl = curl;
+    	threadargs.ip = ips[ipnum].ip;
+    	threadargs.port = ips[ipnum].port;
+    	threadargs.busterminus.lineID = buslineinfo[0];
+    	threadargs.busterminus.lineName = buslineinfo[1];
+    	threadargs.busterminus.terminusId = buslineinfo[2];
+    	threadargs.busterminus.terminusName = buslineinfo[3];
+    	threadargss.push_back(threadargs);
+    	ipnum++;
+    	if(ipnum >= ips_length)
+    		ipnum = 0;
+    }
+
+    return threadargss;
+}
+
+void* businfo::runUrl(void *arg)
+{
+	threadArgs *threadargs = (threadArgs *)arg;
+	string url = "http://222.85.139.244:1001/BusService/QueryDetail_ByRouteID/?RouteID="
+			+threadargs->busterminus.lineID+"&SegmentID="+threadargs->busterminus.terminusId;
+	cout<<"<*****url*****>"<<url<<" "<<threadargs->ip<<":"<<threadargs->port<<endl;
+	string buslines_src;
+	getDataFromUrl getdata;
+	buslines_src = getdata.getBusInfoByUrl(threadargs->curl, url, threadargs->ip, threadargs->port, true); //set proxy
+	if(buslines_src.length() <= 0)
+	{
+		cout<<"false=====\n";
+	    buslines_src = getdata.getBusInfoByUrl(threadargs->curl, url, threadargs->ip, threadargs->port, false); //not set proxy
+	}
+	//cout<<"<*****buslines_src*****>"<<buslines_src<<endl;
+	businfo bus;
+	vector<busPositionInfo> busPositionInfos = bus.getBusPositonInfo(threadargs->busterminus, buslines_src);
+	cout<<"busPositionInfos size()=====>"<<busPositionInfos.size()<<endl;
+
+
+	if(pthread_mutex_lock(&BACK_COMM_mutex)!=0)
+	{
+        printf("buslist BACK_COMM_mutex lock err !!\n");
+        return NULL;
+	}
+	if(busPositionInfos.size() != 0)
+		busLists::buslist.push_back(busPositionInfos);
+	if(pthread_mutex_unlock(&BACK_COMM_mutex)!=0) //unlock
+    {
+		printf("buslist pthread_mutex_unlock err !!\n");
+		return NULL;
+    }
+}
+
+void businfo::runPthread()
+{
+    int urllines = busLists::threadargss.size();
+    cout<<"urllines===>"<<urllines<<endl;
+    busLists::buslist.clear();
+    time_t tt = time(NULL);
+    tm* t1= localtime(&tt);
+    char time1[100];
+    sprintf(time1, "%d-%02d-%02d %02d:%02d:%02d\n", t1->tm_year + 1900,t1->tm_mon + 1,t1->tm_mday,t1->tm_hour,t1->tm_min,t1->tm_sec);
+
+    for (int i = 0; i < 4; i++) {
+    	threadpool::pool_add_worker (businfo::runUrl, &busLists::threadargss[i]);
+    }
+    sleep(2);
+    while(1)
+    {
+    	if(threadpool::pool->cur_queue_size == 0)
+    	{
+    		break;
+    		cout<<"===========exit\n";
+    	}
+    	sleep(2);
+    	continue;
+    }
+    time_t tt1 = time(NULL);
+    tm* t2= localtime(&tt1);
+    char time2[100];
+    sprintf(time2, "%d-%02d-%02d %02d:%02d:%02d\n", t2->tm_year + 1900,t2->tm_mon + 1,t2->tm_mday,t2->tm_hour,t2->tm_min,t2->tm_sec);
+    cout<<"begin time"<<time1;
+    cout<<"end time"<<time2;
 }
 
 

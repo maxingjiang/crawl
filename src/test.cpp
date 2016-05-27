@@ -6,7 +6,7 @@
  */
 #include "test.h"
 
-int postUrl()
+int Test::postUrl()
 {
     std:;cout<<"post===>\n";
     CURL *curl;
@@ -34,7 +34,7 @@ int postUrl()
     return 1;
 }
 
-int getCCT()
+int Test::getCCT()
 {
     CURL *curl;
     CURLcode res;
@@ -78,7 +78,7 @@ int getCCT()
     return 1;
 }
 
-int getUrl()
+int Test::getUrl()
 {
     CURL *curl;
     crawl cr;
@@ -127,7 +127,7 @@ int getUrl()
     return 0;
 }
 
-void setBusInfo()
+void Test::setBusInfo()
 {
 	CURL *curl;
     crawl cr;
@@ -150,7 +150,7 @@ void setBusInfo()
     std::cout<<"body===>\n"<<cr.m_data_buf.size()<<" :\n"<<cr.m_data_buf<<std::endl;
 }
 
-string testgetBusInfoByUrl(CURL *curl, string &Url)
+string Test::testgetBusInfoByUrl(CURL *curl, string &Url)
 {
     crawl cr;
     cr.clear();

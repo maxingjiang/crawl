@@ -71,7 +71,8 @@ struct busPositionInfo
 	string arriveTime;
 	string arriveStaInfo;
 	string nextStaInfo;
-	pos busPos;
+	double Latitude;
+	double Longitude;
 };
 
 struct threadArgs
@@ -82,6 +83,24 @@ struct threadArgs
 	int port;
 };
 
+class busLists
+{
+public:
+	static vector< vector<busPositionInfo> > buslist;
+	static vector<threadArgs> threadargss;
+};
+/* buslist descreption
+ * 0:lineID
+ * 1:lineName
+ * 2:terminusId
+ * 3:terminusName
+ * 4:busId
+ * 5:arriveTime
+ * 6:arriveStaInfo
+ * 7:nextStaInfo
+ * 8:Latitude
+ * 9:Longitude
+ * */
 
 class businfo
 {
@@ -101,8 +120,15 @@ class businfo
 		vector<busPositionInfo> getBusPositonInfo(busTerminus lineStationInfo, string &src); //get pos info of bus
 
 		LineIdAndTerminusId getLineIdAndTerminusId(string &src); //get line id and terminus id
+
 		string setJsonSrcs(vector<busPositionInfo> busPositionInfos); //set struct to json string
 		string setJsonSrc(busPositionInfo busPositionInfos); //set struct to json string
+		string mergeJsonSrcs(vector<vector<busPositionInfo> > busPositionInfos); //merge all json info
+		void runPthread();  //get all data
+
+		//use by threadpool
+		vector<threadArgs> getArgsForThread();
+		static void* runUrl(void *arg);
 
 
 	public:

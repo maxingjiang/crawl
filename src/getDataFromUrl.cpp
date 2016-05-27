@@ -3,7 +3,7 @@
 #include "getDataFromUrl.h"
 #include "threadpool.h"
 
-string getBusInfoByUrl(CURL *curl, string &Url, string &ip, int port, bool setproxy)
+string getDataFromUrl::getBusInfoByUrl(CURL *curl, string &Url, string &ip, int port, bool setproxy)
 {
     crawl cr;
     cr.clear();
@@ -57,7 +57,7 @@ string getBusInfoByUrl(CURL *curl, string &Url, string &ip, int port, bool setpr
     return buffer_data;
 }
 
-int writebuslineToConf()
+int getDataFromUrl::writebuslineToConf()
 {
 	curl_global_init(CURL_GLOBAL_ALL);
 	CURL *curl;
@@ -97,7 +97,7 @@ int writebuslineToConf()
     return 0;
 }
 
-vector<ip_port> getUsfulProxyIP(vector<ip_port> proxyips)
+vector<ip_port> getDataFromUrl::getUsfulProxyIP(vector<ip_port> proxyips)
 {
 	vector<ip_port> proxys;
 	vector<ip_port>::iterator iter = proxyips.begin();
@@ -122,7 +122,7 @@ vector<ip_port> getUsfulProxyIP(vector<ip_port> proxyips)
     return proxys;
 }
 
-int testProxyip(string ip, int port)
+int getDataFromUrl::testProxyip(string ip, int port)
 {
     CURL *curl;
     CURLcode res;
@@ -171,7 +171,7 @@ int testProxyip(string ip, int port)
     return 0;
 }
 
-int main1(int argc, char *argv[])
+int getDataFromUrl::main1(int argc, char *argv[])
 {
 	curl_global_init(CURL_GLOBAL_ALL);
 	CURL *curl;
@@ -215,8 +215,8 @@ int main1(int argc, char *argv[])
 
     exit(0);
 }
-
-void* run(void *arg)
+/*
+void* getDataFromUrl::runUrl1(void *arg)
 {
 	threadArgs *threadargs = (threadArgs *)arg;
 	string url = "http://222.85.139.244:1001/BusService/QueryDetail_ByRouteID/?RouteID="
@@ -234,7 +234,7 @@ void* run(void *arg)
 	vector<busPositionInfo> busPositionInfos = bus.getBusPositonInfo(threadargs->busterminus, buslines_src);
 }
 
-int start()
+int getDataFromUrl::startUrl1()
 {
     curl_global_init(CURL_GLOBAL_ALL);
     CURL *curl;
@@ -279,7 +279,7 @@ int start()
     threadpool tpool;
     tpool.pool_init (10);
     for (int i = 0; i < urllines; i++) {
-        tpool.pool_add_worker (run, &threadargss[i]);
+        tpool.pool_add_worker (getDataFromUrl::runUrl1, &threadargss[i]);
     }
     //sleep(2);
     while(1)
@@ -304,7 +304,7 @@ int start()
     return 0;
 }
 
-vector<threadArgs> getBusinfoFromFile()
+vector<threadArgs> getDataFromUrl::getBusinfoFromFile()
 {
     businfo bus;
     const int LINE_LENGTH = 2048;
@@ -344,7 +344,7 @@ vector<threadArgs> getBusinfoFromFile()
     return threadargss;
 }
 
-vector<busPositionInfo> server_run(CURL *curl, string lineID, string terminusId)
+vector<busPositionInfo> getDataFromUrl::server_run(CURL *curl, string lineID, string terminusId)
 {
 	vector<threadArgs> threadargss = getBusinfoFromFile();
 	vector<threadArgs>::iterator iter = threadargss.begin();
@@ -376,4 +376,4 @@ vector<busPositionInfo> server_run(CURL *curl, string lineID, string terminusId)
 		busPositionInfos = bus.getBusPositonInfo(desc->busterminus, buslines_src);
 	}
 	return busPositionInfos;
-}
+}*/

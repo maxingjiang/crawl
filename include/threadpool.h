@@ -28,7 +28,7 @@ class threadpool
 public:
 	static void pool_init (int max_thread_num);
 	static int pool_destroy ();
-	static int pool_add_worker (void *(*process) (void *arg), void*arg);  
+	static int pool_add_worker (void *(*process) (void *arg), void*arg);
 	static void *thread_routine (void *arg);  
 	static CThread_pool *pool; 
 };

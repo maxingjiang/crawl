@@ -1,17 +1,16 @@
 .SUFFIXES: .cpp .o
 
 CC=g++
-#SERVERSRCS=server.cpp\
-	   client.cpp
+#SERVERSRCS=server.cpp
 CLIENTSRCS=client.cpp
-SERVEROBJS=server.o
+#SERVEROBJS=server.o
 CLIENTOBJS=client.o
-SERVEREXEC=server
+#SERVEREXEC=server
 CLIENTEXEC=client
 
 all:$(SERVEROBJS) $(CLIENTOBJS)
-#	$(CC) -o $(SERVEREXEC) $(SERVEROBJS) ../lib/libboost_system.so.1.57.0 ../lib/libboost_thread.so.1.57.0 -lcurl
-	$(CC) -o $(CLIENTEXEC) $(CLIENTOBJS) ../lib/libboost_system.so.1.57.0 ../lib/libboost_thread.so.1.57.0 -lpthread
+	#$(CC) -o $(SERVEREXEC) $(SERVEROBJS) -lzmq
+	$(CC) -o $(CLIENTEXEC) $(CLIENTOBJS)  -lzmq
 	@echo '-------------ok--------------'
 
 .c.o:
