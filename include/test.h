@@ -21,14 +21,18 @@
 #include <vector>
 using namespace std;
 
-int postUrl();
+class Test
+{
+public:
+	int postUrl();
 
-int getCCT();
+	int getCCT();
 
-int getUrl();
+	int getUrl();
 
-void setBusInfo();
+	void setBusInfo();
 
-string testgetBusInfoByUrl(CURL *curl, string &Url);
+	string testgetBusInfoByUrl(CURL *curl, string &Url);
+};
 
 #endif /* INCLUDE_TEST_H_ */
