@@ -16,78 +16,94 @@
 #include <stdlib.h>
 #include <curl/curl.h>
 #include <curl/easy.h>
+#include "threadpool.h"
 
 using namespace :: std;
 using namespace :: Json;
 using std::string;
 
-struct pos
-{
-	double Latitude;
-	double Longitude;
-};
-
-struct busAllLine
-{
-    string lineID;
-    string lineName;
-};
-
-struct LineIdAndTerminusId
-{
-    string lineID;
-    string terminusId;
-};
-
-struct busStation
-{
-    string lineID;
-    string lineName;
-    string terminusId;
-    string terminusName;
-    string stationID;
-    string stationName;
-    pos stationPos;
-};
-
-struct busTerminus
-{
-    string lineID;
-    string lineName;
-    string terminusId;
-    string terminusName;
-};
-
-struct busPositionInfo
-{
-	string lineID;
-	string lineName;
-	string terminusId;
-	string terminusName;
-	string busId;
-	string stationID;
-	string stationName;
-	pos stationPos;
-	string arriveTime;
-	string arriveStaInfo;
-	string nextStaInfo;
-	double Latitude;
-	double Longitude;
-};
-
-struct threadArgs
-{
-	CURL *curl;
-	busTerminus busterminus;
-	string ip;
-	int port;
-};
-
-class busLists
+class CPos
 {
 public:
-	static vector< vector<busPositionInfo> > buslist;
-	static vector<threadArgs> threadargss;
+	double m_Latitude;
+	double m_Longitude;
+};
+
+class CBusAllLine
+{
+public:
+    string m_lineID;
+    string m_lineName;
+};
+
+class CLineIdAndTerminusId
+{
+public:
+    string m_lineID;
+    string m_terminusId;
+};
+
+class CBusStation
+{
+public:
+    string m_lineID;
+    string m_lineName;
+    string m_terminusId;
+    string m_terminusName;
+    string m_stationID;
+    string m_stationName;
+    CPos m_stationPos;
+};
+
+class CBusTerminus
+{
+public:
+    string m_lineID;
+    string m_lineName;
+    string m_terminusId;
+    string m_terminusName;
+};
+
+class CBusPositionInfo
+{
+public:
+	string m_lineID;
+	string m_lineName;
+	string m_terminusId;
+	string m_terminusName;
+	string m_busId;
+	string m_stationID;
+	string m_stationName;
+	CPos m_stationPos;
+	string m_arriveTime;
+	string m_arriveStaInfo;
+	string m_nextStaInfo;
+	double m_Latitude;
+	double m_Longitude;
+};
+
+class CthreadArgs
+{
+public:
+	CURL *m_curl;
+	CBusTerminus m_busterminus;
+	string m_ip;
+	int m_port;
+	vector< vector<CBusPositionInfo> > *m_buslist;
+};
+
+class CBusLists
+{
+public:
+	vector< vector<CBusPositionInfo> > m_buslist;
+	vector<CthreadArgs> m_threadargss;
+};
+
+class CpoolBuslist
+{
+public:
+	Cthreadpool *m_thread_pool;
+	CBusLists *m_cbuslist;
 };
 /* buslist descreption
  * 0:lineID
@@ -102,7 +118,7 @@ public:
  * 9:Longitude
  * */
 
-class businfo
+class Cbusinfo
 {
 	public:
 		void clearInfo();
@@ -111,28 +127,28 @@ class businfo
 				string busId, string stationID, string stationName, string arriveTime,
 				string arriveStaInfo, string nextStaInfo, double Latitude, double Longitude);
 
-		vector<busAllLine> getAllLineInfo(string &src); //get all lines
+		vector<CBusAllLine> getAllLineInfo(string &src); //get all lines
 
-		vector<busStation> getBusStation(string &src); //get all stations of every line
+		vector<CBusStation> getBusStation(string &src); //get all stations of every line
 
-		vector<busTerminus> getBusTerminus(FILE *pbusline, string &src); //get terminus station of every line
+		vector<CBusTerminus> getBusTerminus(FILE *pbusline, string &src); //get terminus station of every line
 
-		vector<busPositionInfo> getBusPositonInfo(busTerminus lineStationInfo, string &src); //get pos info of bus
+		vector<CBusPositionInfo> getBusPositonInfo(CBusTerminus lineStationInfo, string &src); //get pos info of bus
 
-		LineIdAndTerminusId getLineIdAndTerminusId(string &src); //get line id and terminus id
+		CLineIdAndTerminusId getLineIdAndTerminusId(string &src); //get line id and terminus id
 
-		string setJsonSrcs(vector<busPositionInfo> busPositionInfos); //set struct to json string
-		string setJsonSrc(busPositionInfo busPositionInfos); //set struct to json string
-		string mergeJsonSrcs(vector<vector<busPositionInfo> > busPositionInfos); //merge all json info
-		void runPthread();  //get all data
+		string setJsonSrcs(vector<CBusPositionInfo> busPositionInfos); //set struct to json string
+		string setJsonSrc(CBusPositionInfo busPositionInfos); //set struct to json string
+		string mergeJsonSrcs(vector< vector<CBusPositionInfo> > busPositionInfos); //merge all json info
+		void runPthread(CpoolBuslist *buslistinfo);  //get all data
 
 		//use by threadpool
-		vector<threadArgs> getArgsForThread();
+		vector<CthreadArgs> getArgsForThread();
 		static void* runUrl(void *arg);
 
 
 	public:
-		busPositionInfo bus;
+		CBusPositionInfo m_bus;
 		/*
 		string m_lineID;
 		string m_lineName;

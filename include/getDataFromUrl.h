@@ -18,25 +18,20 @@
 using namespace std;
 using std::string;
 
-class getDataFromUrl
+class CgetDataFromUrl
 {
 public:
-	static string getBusInfoByUrl(CURL *curl, string &Url, string &ip, int port, bool setproxy);
+    string getBusInfoByUrl(CURL *curl, string &Url, string &ip, int port, bool setproxy);
 
 	int writebuslineToConf();
 
-	vector<ip_port> getUsfulProxyIP(vector<ip_port> proxyips);
+	vector<Cip_port> getUsfulProxyIP(vector<Cip_port> proxyips);
 
 	int testProxyip(string ip, int port);
 
-	int main1(int argc, char *argv[]);
-/*
-	//use by pthread
-	int startUrl1();
-	static void* runUrl1(void *arg);
+	void getAllUsefulProxyIP();
 
-	//use by server
-	vector<threadArgs> getBusinfoFromFile();
-	vector<busPositionInfo> server_run(CURL *curl, string lineID, string terminusId);*/
+	int main1(int argc, char *argv[]);
+
 };
 #endif /* INCLUDE_GETDATAFROMURL_H_ */

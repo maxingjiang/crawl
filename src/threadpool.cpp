@@ -1,7 +1,16 @@
 #include "threadpool.h" 
-  
-CThread_pool *threadpool::pool = NULL; 
-void threadpool::pool_init (int max_thread_num)  
+
+
+Cthreadpool::Cthreadpool(int max_thread_num)
+{
+	pool_init(max_thread_num);
+}
+Cthreadpool::~Cthreadpool()
+{
+	pool_destroy();
+}
+
+void Cthreadpool::pool_init (int max_thread_num)
 {  
     pool = (CThread_pool *) malloc (sizeof(CThread_pool));  
     pthread_mutex_init (&(pool->queue_lock), NULL);  
@@ -14,16 +23,16 @@ void threadpool::pool_init (int max_thread_num)
   
     pool->shutdown = 0;  
   
-    pool->threadid = (pthread_t *) malloc (max_thread_num * sizeof(pthread_t));  
+    pool->threadid = (pthread_t *) malloc (max_thread_num * sizeof(pthread_t));
     int i = 0;  
     for (i = 0; i < max_thread_num; i++) {  
-        pthread_create (&(pool->threadid[i]), NULL, thread_routine, NULL);  
+        pthread_create (&(pool->threadid[i]), NULL, callback, this);
     }  
 }  
   
-int threadpool::pool_add_worker (void *(*process) (void *arg), void*arg)  
+int Cthreadpool::pool_add_worker (void *(*process) (void *arg), void*arg)
 {  
-    CThread_worker *newworker = (CThread_worker *) malloc (sizeof(CThread_worker));  
+    CThread_worker *newworker = (CThread_worker *) malloc (sizeof(CThread_worker));
     newworker->process = process;  
     newworker->arg = arg;  
     newworker->next = NULL;  
@@ -45,7 +54,7 @@ int threadpool::pool_add_worker (void *(*process) (void *arg), void*arg)
     return 0;  
 }  
   
-int threadpool::pool_destroy ()  
+int Cthreadpool::pool_destroy ()
 {  
     if (pool->shutdown)  
         return -1;  
@@ -69,23 +78,23 @@ int threadpool::pool_destroy ()
     return 0;  
 }  
   
-void *threadpool::thread_routine (void *arg)  
+void *Cthreadpool::thread_routine (void *arg)
 {  
-    printf ("starting thread 0x%x\n", (unsigned int)pthread_self ());  
+    //printf ("starting thread 0x%x\n", (unsigned int)pthread_self ());
     while (1) {  
         pthread_mutex_lock (&(pool->queue_lock));  
         while (pool->cur_queue_size == 0 && !pool->shutdown) {  
-            printf ("thread 0x%lu is waiting\n", (unsigned long)pthread_self ());
+            //printf ("thread 0x%lu is waiting\n", (unsigned long)pthread_self ());
             pthread_cond_wait (&(pool->queue_ready), &(pool->queue_lock));  
         }  
   
         if (pool->shutdown) {  
             pthread_mutex_unlock (&(pool->queue_lock));  
-            printf ("thread 0x%lu will exit\n", (unsigned long)pthread_self ());
+            //printf ("thread 0x%lu will exit\n", (unsigned long)pthread_self ());
             pthread_exit (NULL);  
         }  
   
-        printf ("thread 0x%lu is starting to work\n", (unsigned long)pthread_self ());
+        //printf ("thread 0x%lu is starting to work\n", (unsigned long)pthread_self ());
         assert (pool->cur_queue_size != 0);  
         assert (pool->queue_head != NULL);  
   
@@ -100,3 +109,11 @@ void *threadpool::thread_routine (void *arg)
     }  
     pthread_exit (NULL);  
 }  
+
+void *Cthreadpool::callback (void *arg)
+{
+	Cthreadpool *p = (Cthreadpool *)arg;
+	p->thread_routine(p);
+	return NULL;
+}
+

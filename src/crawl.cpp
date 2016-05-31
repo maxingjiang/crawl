@@ -2,21 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "crawl.h"
- 
-std::string crawl::m_data_buf = "";
-int crawl::m_data_shift = 0;
-std::string crawl::m_head_buf = "";
-int crawl::m_head_shift = 0;
 
-void crawl::clear()
-{
-    m_data_buf = "";
-    m_data_shift = 0;
-    m_head_buf = "";
-    m_head_shift = 0;
-}
-
-std::vector<std::string> crawl::split_response_cookie(std::string source, const  std::string& s)
+std::vector<std::string> Ccrawl::split_response_cookie(std::string source, const  std::string& s)
 {
     std::vector<std::string> ret = split(source, "\n");
     std::vector<std::string> src;
@@ -33,7 +20,7 @@ std::vector<std::string> crawl::split_response_cookie(std::string source, const 
     return src;
 }
 
-std::vector<std::string> crawl::split(const  std::string& s, const std::string& delim)  
+std::vector<std::string> Ccrawl::split(const  std::string& s, const std::string& delim)
 {  
     std::vector<std::string> elems;  
     size_t pos = 0;  
@@ -54,8 +41,8 @@ std::vector<std::string> crawl::split(const  std::string& s, const std::string& 
     }  
     return elems;  
 }
-  
-size_t crawl::write_data(void *ptr, size_t size, size_t nmemb, void *stream)  
+
+size_t Ccrawl::write_data(void *ptr, size_t size, size_t nmemb, void *stream)
 {
     //printf("============\n===========%s\n", (char *)ptr);
     //int res_size = size * nmemb;
@@ -65,21 +52,10 @@ size_t crawl::write_data(void *ptr, size_t size, size_t nmemb, void *stream)
     return size * nmemb;
 }
  
-size_t crawl::header_callback(char *buffer, size_t size, size_t nitems, void *userdata)
+size_t Ccrawl::header_callback(char *buffer, size_t size, size_t nitems, void *userdata)
 {
 	strcat((char*)userdata, (char*)buffer);
-    return size * nitems;   
+    return size * nitems;
 }
 
-void crawl::get_body(std::string search_src)
-{
-    std::vector<std::string> ret = split(m_data_buf, "\n");
-    std::vector<std::string>::iterator iter = ret.begin();
-    for(;iter != ret.end(); iter++)
-    {
-	int findpos = (*iter).find(search_src, 0);
-	if(findpos >= 0)
-	    std::cout<<*iter<<std::endl;
-    }
-}
 

@@ -18,20 +18,18 @@
 #include <fstream>
 using namespace std;
 
-struct ip_port
+class Cip_port
 {
-	string ip;
-	int port;
+public:
+	string m_ip;
+	int m_port;
 };
 
-class ProxyIP
+class CProxyIP
 {
 	public:
-		ProxyIP(std::string filename);
-		~ProxyIP();
-		vector<ip_port> readProxy();
-	public:
-		string m_filename;
+		vector<Cip_port> readProxy(string filename);
+
 };
 
 

@@ -9,30 +9,23 @@
 #define INCLUDE_COMMON_H_
 
 #include <stdio.h>
-#include "log4cpp/Portability.hh"
-#ifdef LOG4CPP_HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-#include <iostream>
-#include "log4cpp/Category.hh"
-#include "log4cpp/Appender.hh"
-#include "log4cpp/FileAppender.hh"
-#include "log4cpp/OstreamAppender.hh"
-#ifdef LOG4CPP_HAVE_SYSLOG
-#endif
-#include "log4cpp/Layout.hh"
-#include <log4cpp/PatternLayout.hh>
-#include "log4cpp/Priority.hh"
+#include <log4cplus/logger.h>
+#include <log4cplus/configurator.h>
+#include <log4cplus/helpers/loglog.h>
+#include <log4cplus/helpers/stringhelper.h>
+#include <log4cplus/loggingmacros.h>
+#include <log4cplus/fileappender.h>
+#include <log4cplus/consoleappender.h>
 
-class logCPP
+using namespace std;
+using namespace log4cplus;
+using namespace log4cplus::helpers;
+
+class ClogCPP
 {
 public:
-	static log4cpp::Appender* appender;
-	static log4cpp::PatternLayout* pLayout;
-	static void info(char *file, int line, char *src);
-	static void debug(char *file, int line, char *src);
-	static void warn(char *file, int line, char *src);
-	static void error(char *file, int line, char *src);
+	static Logger m_logger;
+	static void init();
 };
 
 #endif /* INCLUDE_COMMON_H_ */

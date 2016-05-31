@@ -11,31 +11,20 @@
 
 using namespace std;
 
-ProxyIP::ProxyIP(std::string filename)
+vector<Cip_port> CProxyIP::readProxy(string filename)
 {
-	m_filename = filename;
-}
-
-ProxyIP::~ProxyIP()
-{
-	m_filename = "";
-}
-
-vector<ip_port> ProxyIP::readProxy()
-{
-	vector<ip_port> proxys;
+	vector<Cip_port> proxys;
     const int LINE_LENGTH = 1024;
     char str[LINE_LENGTH];
-    crawl cr;
-    ifstream fin(m_filename.c_str());
+    Ccrawl cr;
+    ifstream fin(filename.c_str());
     while( fin.getline(str,LINE_LENGTH) != NULL)
     {
-    	cr.clear();
     	std::vector<std::string> iplines = cr.split(str, ":");
         //std::cout << "proxy: " << iplines[0]<<":"<<iplines[1] << std::endl;
-    	ip_port proxy;
-    	proxy.ip = iplines[0];
-    	proxy.port = atoi(iplines[1].c_str());
+    	Cip_port proxy;
+    	proxy.m_ip = iplines[0];
+    	proxy.m_port = atoi(iplines[1].c_str());
     	proxys.push_back(proxy);
     }
     return proxys;

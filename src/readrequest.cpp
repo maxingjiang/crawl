@@ -2,28 +2,18 @@
 #include "readrequest.h"
 using namespace std;
 
-readConf::readConf(std::string filename)
-{
-	m_requestconf.clear();
-	m_filename = filename;
-}
 
-readConf::~readConf()
+vector<string> CreadConf::readrequest(string &filename)
 {
-	m_requestconf.clear();
-	m_filename = "";
-}
-
-void readConf::readrequest()
-{
-    const int LINE_LENGTH = 2048; 
+    const int LINE_LENGTH = 1024;
     char str[LINE_LENGTH]; 
-    ifstream fin(m_filename.c_str()); 
+    vector<string> headers;
+    ifstream fin(filename.c_str());
     while( fin.getline(str,LINE_LENGTH) != NULL)
     {    
         //std::cout << "Read from file: " << str << std::endl;
-    	m_requestconf.push_back(str);
+    	headers.push_back(str);
     }
-	
+	return headers;
 }
 

@@ -1,3 +1,6 @@
+#ifndef INCLUDE_THREADPOOL_H_
+#define INCLUDE_THREADPOOL_H_
+
 #include <stdio.h>  
 #include <stdlib.h>  
 #include <unistd.h>  
@@ -23,12 +26,17 @@ typedef struct
     int cur_queue_size;  
 } CThread_pool;  
 
-class threadpool
+class Cthreadpool
 {
 public:
-	static void pool_init (int max_thread_num);
-	static int pool_destroy ();
-	static int pool_add_worker (void *(*process) (void *arg), void*arg);
-	static void *thread_routine (void *arg);  
-	static CThread_pool *pool; 
+	Cthreadpool(int max_thread_num);
+	 ~Cthreadpool();
+	 void pool_init (int max_thread_num);
+	 int pool_destroy ();
+	 int pool_add_worker (void *(*process) (void *arg), void*arg);
+	 void *thread_routine (void *arg);
+	 static void *callback (void *arg);
+	 CThread_pool *pool;
 };
+
+#endif /* INCLUDE_THREADPOOL_H_ */
