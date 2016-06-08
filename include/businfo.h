@@ -62,6 +62,8 @@ public:
     string m_lineName;
     string m_terminusId;
     string m_terminusName;
+    string m_beginTime;
+    string m_endTime;
 };
 
 class CBusPositionInfo
@@ -131,7 +133,7 @@ class Cbusinfo
 
 		vector<CBusStation> getBusStation(string &src); //get all stations of every line
 
-		vector<CBusTerminus> getBusTerminus(FILE *pbusline, string &src); //get terminus station of every line
+		vector<CBusTerminus> getBusTerminus(string &src); //get terminus station of every line
 
 		vector<CBusPositionInfo> getBusPositonInfo(CBusTerminus lineStationInfo, string &src); //get pos info of bus
 
@@ -140,11 +142,22 @@ class Cbusinfo
 		string setJsonSrcs(vector<CBusPositionInfo> busPositionInfos); //set struct to json string
 		string setJsonSrc(CBusPositionInfo busPositionInfos); //set struct to json string
 		string mergeJsonSrcs(vector< vector<CBusPositionInfo> > busPositionInfos); //merge all json info
+		string mergeSrcs(vector< vector<CBusPositionInfo> > busPositionInfos); //merge all info
+		string mergeSrcslist(vector<CBusPositionInfo> busPositionInfos);
+
 		void runPthread(CpoolBuslist *buslistinfo);  //get all data
 
 		//use by threadpool
 		vector<CthreadArgs> getArgsForThread();
 		static void* runUrl(void *arg);
+
+		int IsInTimeSpan(string &begintime, string &endtime); //now is in time region or not(format:06:30:00)
+
+		void copyBusList(vector<CBusPositionInfo> &desc, const vector< vector<CBusPositionInfo> > &src);
+
+		vector<CBusPositionInfo> checkNewBusList(const vector<CBusPositionInfo> &desc, const vector< vector<CBusPositionInfo> > &src);
+
+		bool checkBusLineExist(CBusPositionInfo desc, const vector<CBusPositionInfo>  &src);
 
 
 	public:

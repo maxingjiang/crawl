@@ -2,14 +2,18 @@
 #include <iostream>
 #include "getDataFromUrl.h"
 #include "threadpool.h"
+#include "common.h"
+#include <sys/file.h>
 
 string CgetDataFromUrl::getBusInfoByUrl(CURL *curl, string &Url, string &ip, int port, bool setproxy)
 {
-	Ccrawl cr;
+   // string buf = "{\"RouteID\":1,\"SegmentID\":9002,\"BusPosList\":[{\"BusID\":\"903413\",\"BusName\":\"903413\",\"StationID\":\"5030\",\"ArriveTime\":\"2016-06-02 14:55:48\",\"ArriveStaInfo\":\"延安西路\",\"NextStaInfo\":\"开往紫林庵\",\"BusPostion\":{\"Longitude\":106.71068,\"Latitude\":26.56742}},{\"BusID\":\"903392\",\"BusName\":\"903392\",\"StationID\":\"5035\",\"ArriveTime\":\"2016-06-02 14:55:51\",\"ArriveStaInfo\":\"火车站\",\"NextStaInfo\":null,\"BusPostion\":{\"Longitude\":106.69747,\"Latitude\":26.58376}}],\"StalineCon\":[\"1492,3\",\"5030,3\",\"5031,3\",\"5032,3\",\"5033,3\",\"5036,3\",\"5037,3\",\"5034,3\"],\"IsEnd\":null}";
+   // return buf;
+    Ccrawl cr;
 
     curl=curl_easy_init();
     struct curl_slist *headers = NULL;
-    std::string filename = "conf/request.conf";
+    std::string filename = REQUESTCONF;
     CreadConf rd;
     vector<string> header = rd.readrequest(filename);
     std::vector<std::string>::iterator iter = header.begin();
@@ -20,7 +24,7 @@ string CgetDataFromUrl::getBusInfoByUrl(CURL *curl, string &Url, string &ip, int
         headers = curl_slist_append(headers, (*iter).c_str());
     }
     /*
-    filename = "conf/cookie.conf";
+    filename = COOKIECONF;
     readConf rd1(filename);
     rd1.readrequest();
     std::vector<std::string>::iterator itercookie = rd1.m_requestconf.begin();
@@ -40,6 +44,7 @@ string CgetDataFromUrl::getBusInfoByUrl(CURL *curl, string &Url, string &ip, int
         curl_easy_setopt(curl, CURLOPT_PROXY, ip.c_str());
         curl_easy_setopt(curl, CURLOPT_PROXYPORT, port);
     }
+    curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
     curl_easy_setopt(curl, CURLOPT_URL, Url.c_str());
     curl_easy_setopt(curl, CURLOPT_TIMEOUT, 1L);
     char buffer_data[1000000] = {0x0};
@@ -51,6 +56,7 @@ string CgetDataFromUrl::getBusInfoByUrl(CURL *curl, string &Url, string &ip, int
     //curl_easy_setopt(curl, CURLOPT_NOBODY, 1L);
     curl_easy_perform(curl);
     curl_easy_cleanup(curl);
+    curl_slist_free_all(headers);
     //std::cout<<"header===>\n"<<buffer_header<<std::endl;
     //std::cout<<"body===>\n"<<buffer_data<<std::endl;
     return buffer_data;
@@ -68,22 +74,65 @@ int CgetDataFromUrl::writebuslineToConf()
  	tm* t1= localtime(&tt);
  	char time1[100];
  	sprintf(time1, "%d-%02d-%02d %02d:%02d:%02d\n", t1->tm_year + 1900,t1->tm_mon + 1,t1->tm_mday,t1->tm_hour,t1->tm_min,t1->tm_sec);
- 	string ip = "";
-	string buslines_src = getBusInfoByUrl(curl, url, ip, 0, false);
+ 	string localip = "";
+ 	CProxyIP ip;
+ 	vector<Cip_port> ips = ip.readProxy(PROXYCONF);
+ 	int ips_length = ips.size();
+ 	int ipnum = 0;
+	string buslines_src = getBusInfoByUrl(curl, url, localip, 0, false);
 	vector<CBusAllLine> buslines = bus.getAllLineInfo(buslines_src);
 	std::vector<CBusAllLine>::iterator iter = buslines.begin();
-	FILE *pbusline;
-	if ((pbusline = fopen("conf/busline.conf", "w")) == NULL)
-	    return 0;
+
+	vector<CBusTerminus> busStations;
+
 	for(; iter != buslines.end(); iter++)
 	{
 		url = "http://222.85.139.244:1001/BusService/Require_RouteStatData/?RouteID="+iter->m_lineID;
+		cout<<"url==>"<<url<<endl;
 		urlline++;
-		buslines_src = getBusInfoByUrl(curl, url, ip, 0, false);
-		vector<CBusTerminus> busStations = bus.getBusTerminus(pbusline, buslines_src);
+		buslines_src = getBusInfoByUrl(curl, url, ips[ipnum].m_ip, ips[ipnum].m_port, true);
+		if(buslines_src.length() <= 0)
+		{
+			printf("set proxy ip: %s, port: %d false=====>\n", ips[ipnum].m_ip.c_str(), ips[ipnum].m_port);
+			buslines_src = getBusInfoByUrl(curl, url, ips[ipnum].m_ip, ips[ipnum].m_port, false); //not set proxy
+		}
+		vector<CBusTerminus> busStation = bus.getBusTerminus(buslines_src);
+		std::vector<CBusTerminus>::iterator busStation_iter = busStation.begin();
+		for(; busStation_iter != busStation.end(); busStation_iter++)
+			busStations.push_back(*busStation_iter);
 
+		ipnum++;
+		if(ipnum >= ips_length)
+		ipnum = 0;
 	}
-	fclose(pbusline);
+	printf("begin write file %s=====>\n", BUSLINECONF);
+	FILE *pbusline;
+	if ((pbusline = fopen(BUSLINECONF, "w")) == NULL)
+	    return 0;
+	while(1)
+	{
+	    // 加锁以判断文件是否已经被加锁了
+	    if(flock(fileno(pbusline), LOCK_EX | LOCK_NB) == 0)
+		{
+			printf("file %s is unlock status \n", BUSLINECONF);
+			std::vector<CBusTerminus>::iterator busStations_iter = busStations.begin();
+			for(; busStations_iter != busStations.end(); busStations_iter++)
+			{
+			    fprintf(pbusline, "%s---%s---%s---%s---%s---%s\n", busStations_iter->m_beginTime.c_str(), busStations_iter->m_endTime.c_str(),
+			    		busStations_iter->m_lineID.c_str(), busStations_iter->m_lineName.c_str(),
+						busStations_iter->m_terminusId.c_str(), busStations_iter->m_terminusName.c_str());
+			}
+			fclose(pbusline);
+			flock(fileno(pbusline), LOCK_UN);
+			break;
+		}
+		else
+		{
+			printf("file %s is locked, please wait \n", BUSLINECONF);
+			sleep(1);
+		}
+	}
+	printf("end write file %s=====>\n", BUSLINECONF);
 	time_t tt1 = time(NULL);
  	tm* t2= localtime(&tt1);
  	char time2[100];
@@ -134,7 +183,7 @@ int CgetDataFromUrl::testProxyip(string ip, int port)
     	curl_easy_setopt(curl, CURLOPT_PROXYPORT, port);
         curl_easy_setopt(curl, CURLOPT_TIMEOUT, 1L);
         struct curl_slist *headers = NULL;
-        std::string filename = "conf/request.conf";
+        std::string filename = REQUESTCONF;
         CreadConf rd;
         vector<string> headdata = rd.readrequest(filename);
         std::vector<std::string>::iterator iter = headdata.begin();
@@ -156,6 +205,7 @@ int CgetDataFromUrl::testProxyip(string ip, int port)
         res = curl_easy_perform(curl);
         //std::cout<<"buffer_data length===>\n"<<strlen(buffer_data)<<std::endl;
         curl_easy_cleanup(curl);
+        curl_slist_free_all(headers);
         int num = string(buffer_header).find("200 OK");
         std::cout<<ip<<":"<<port<<" num:"<<num<<std::endl;
         if( num >= 0)
@@ -199,7 +249,7 @@ int CgetDataFromUrl::main1(int argc, char *argv[])
 		url = "http://222.85.139.244:1001/BusService/Require_RouteStatData/?RouteID="+iter->m_lineID;
 		urlline++;
 		buslines_src = getBusInfoByUrl(curl, url, ip, 0, false);
-		vector<CBusTerminus> busStations = bus.getBusTerminus(NULL,buslines_src);
+		vector<CBusTerminus> busStations = bus.getBusTerminus(buslines_src);
 		std::vector<CBusTerminus>::iterator iter1 = busStations.begin();
 		for(; iter1 != busStations.end(); iter1++)
 		{

@@ -4,7 +4,7 @@
  *  Created on: May 17, 2016
  *      Author: mxj
  */
-
+#include <iostream>
 #include "businfo.h"
 #include<iomanip>
 #include <sstream>
@@ -14,7 +14,7 @@
 #include "getDataFromUrl.h"
 #include "threadpool.h"
 #include "common.h"
-
+#include <sys/file.h>
 
 pthread_mutex_t BACK_COMM_mutex = PTHREAD_MUTEX_INITIALIZER ;
 
@@ -123,7 +123,7 @@ vector<CBusStation> Cbusinfo::getBusStation(string &src)
 	return busstation;
 }
 
-vector<CBusTerminus> Cbusinfo::getBusTerminus(FILE *pbusline, string &src)
+vector<CBusTerminus> Cbusinfo::getBusTerminus(string &src)
 {
 	Json::Reader reader;
 	Json::Value value;
@@ -147,9 +147,18 @@ vector<CBusTerminus> Cbusinfo::getBusTerminus(FILE *pbusline, string &src)
 			{
 				busterminus.m_terminusId = terminusList[terminus]["SegmentID"].asString();
 				busterminus.m_terminusName = terminusList[terminus]["SegmentName"].asString();
+				string FirstTime = terminusList[terminus]["FirstTime"].asString();
+				string LastTime = terminusList[terminus]["LastTime"].asString();
+				Ccrawl cr;
+				vector<string> localtime = cr.split(FirstTime, " ");
+				string firsttime = localtime[1];
+				localtime.clear();
+				localtime = cr.split(LastTime, " ");
+				string lasttime = localtime[1];
+				busterminus.m_beginTime = firsttime;
+				busterminus.m_endTime = lasttime;
+				//cout<<busterminus.m_lineID<<"=>"<<busterminus.m_lineName<<"=>"<<busterminus.m_terminusId<<"=>"<<busterminus.m_terminusName<<firsttime<<"=>"<<lasttime<<endl;
 
-				//cout<<busterminus.m_lineID<<"=>"<<busterminus.m_lineName<<"=>"<<busterminus.m_terminusId<<"=>"<<busterminus.m_terminusName<<endl;
-				fprintf(pbusline, "%s---%s---%s---%s\n",busterminus.m_lineID.c_str(), busterminus.m_lineName.c_str(), busterminus.m_terminusId.c_str(), busterminus.m_terminusName.c_str());
 				busterminuss.push_back(busterminus);
 			}
 		}
@@ -202,13 +211,14 @@ vector<CBusPositionInfo> Cbusinfo::getBusPositonInfo(CBusTerminus lineStationInf
 				sslat>>strlat;
 
 				string linesrc;
+				/*
 				linesrc = busPosition.m_lineID+"=>"+busPosition.m_lineName
 				+"=>"+busPosition.m_terminusId+"=>"+busPosition.m_terminusName
 				+"=>"+busPosition.m_busId+"=>"+busPosition.m_arriveTime
 				+"=>"+busPosition.m_arriveStaInfo+"=>"+busPosition.m_nextStaInfo+"=>"+strlat+"=>"+strlon;
-				//cout<<"line:====>"<<linesrc<<endl;
-				LOG4CPLUS_DEBUG(ClogCPP::m_logger, linesrc.c_str());
-				//LOG4CPLUS_INFO(logCPP::logger, "info");
+				*/
+				linesrc = busPosition.m_lineName+busPosition.m_terminusName+","+busPosition.m_busId+","+strlat+","+strlon+";";
+				//LOG4CPLUS_DEBUG(ClogCPP::m_logger, linesrc.c_str());
 				busPositions.push_back(busPosition);
 
 			}
@@ -260,7 +270,7 @@ string Cbusinfo::setJsonSrcs(vector<CBusPositionInfo> busPositionInfos)
     return src;
 }
 
-string Cbusinfo::mergeJsonSrcs(vector<vector<CBusPositionInfo> > busPositionInfos)
+string Cbusinfo::mergeJsonSrcs(vector< vector<CBusPositionInfo> > busPositionInfos)
 {
     Json::Value root;
     Json::Value arrayline;
@@ -291,7 +301,7 @@ string Cbusinfo::mergeJsonSrcs(vector<vector<CBusPositionInfo> > busPositionInfo
         	src = busPositionInfos[i][j].m_lineID+"=>"+busPositionInfos[i][j].m_lineName+"=>"+busPositionInfos[i][j].m_terminusId+"=>"+
         			busPositionInfos[i][j].m_terminusName+"=>"+busPositionInfos[i][j].m_busId+"=>"+busPositionInfos[i][j].m_arriveTime+"=>"+
 				busPositionInfos[i][j].m_arriveStaInfo+"=>"+busPositionInfos[i][j].m_nextStaInfo+"=>"
-				+strlat+"=>"+strlon;
+				+strlon+"=>"+strlat;
         	item[busPositionInfos[i][j].m_lineName] = src;
         	arraybus.append(item);
     	}
@@ -303,6 +313,57 @@ string Cbusinfo::mergeJsonSrcs(vector<vector<CBusPositionInfo> > busPositionInfo
     std::string src = root.toStyledString();
     //std::cout << src << std::endl;
     return src;
+}
+
+string Cbusinfo::mergeSrcs(vector< vector<CBusPositionInfo> > busPositionInfos)
+{
+	string dessrc;
+	int num = 0;
+    for (int i=0; i<busPositionInfos.size(); i++)
+    {
+    	for (int j=0; j<busPositionInfos[i].size(); j++)
+    	{
+    		string src;
+    		string strlon, strlat;
+    		stringstream sslon, sslat;
+    		sslon<<setprecision(10)<<busPositionInfos[i][j].m_Longitude;
+    		sslon>>strlon;
+    		sslat<<setprecision(10)<<busPositionInfos[i][j].m_Latitude;
+    		sslat>>strlat;
+        	src = busPositionInfos[i][j].m_lineName+","+busPositionInfos[i][j].m_terminusName+","
+        			+busPositionInfos[i][j].m_busId+","+strlon+","+strlat+";";
+
+        	dessrc += src;
+        	num++;
+    	}
+    }
+    //LOG4CPLUS_DEBUG(ClogCPP::m_logger, dessrc);
+    //LOG4CPLUS_INFO(ClogCPP::m_logger, num);
+    return dessrc;
+}
+
+string Cbusinfo::mergeSrcslist(vector<CBusPositionInfo> busPositionInfos)
+{
+	string dessrc;
+	int num = 0;
+    for (int i=0; i<busPositionInfos.size(); i++)
+    {
+    	string src;
+    	string strlon, strlat;
+    	stringstream sslon, sslat;
+    	sslon<<setprecision(10)<<busPositionInfos[i].m_Longitude;
+    	sslon>>strlon;
+    	sslat<<setprecision(10)<<busPositionInfos[i].m_Latitude;
+    	sslat>>strlat;
+        src = busPositionInfos[i].m_lineName+","+busPositionInfos[i].m_terminusName+","
+        		+busPositionInfos[i].m_busId+","+strlon+","+strlat+";";
+
+        dessrc += src;
+        num++;
+    }
+    //LOG4CPLUS_DEBUG(ClogCPP::m_logger, dessrc);
+    //LOG4CPLUS_INFO(ClogCPP::m_logger, num);
+    return dessrc;
 }
 
 string Cbusinfo::setJsonSrc(CBusPositionInfo busPositionInfos)
@@ -329,59 +390,100 @@ vector<CthreadArgs> Cbusinfo::getArgsForThread()
 {
     CURL *curl;
     const int LINE_LENGTH = 2048;
-    char str[LINE_LENGTH];
+    char src[LINE_LENGTH+1];
     Ccrawl cr;
     vector<CthreadArgs> threadargss;
-    ifstream fin("conf/busline.conf");
     CProxyIP ip;
-    vector<Cip_port> ips = ip.readProxy("conf/proxy.conf");
+    string str;
+    vector<Cip_port> ips = ip.readProxy(PROXYCONF);
     int ips_length = ips.size();
     int ipnum = 0;
-    while( fin.getline(str,LINE_LENGTH) != NULL)
+
+    FILE *fp = fopen(BUSLINECONF, "r");
+    if(!fp)
     {
-        //std::cout << "Read from file: " << str << std::endl;
-    	std::vector<std::string> buslineinfo = cr.split(str, "---");
-    	CthreadArgs threadargs;
-    	threadargs.m_curl = curl;
-    	threadargs.m_ip = ips[ipnum].m_ip;
-    	threadargs.m_port = ips[ipnum].m_port;
-    	threadargs.m_busterminus.m_lineID = buslineinfo[0];
-    	threadargs.m_busterminus.m_lineName = buslineinfo[1];
-    	threadargs.m_busterminus.m_terminusId = buslineinfo[2];
-    	threadargs.m_busterminus.m_terminusName = buslineinfo[3];
-    	threadargss.push_back(threadargs);
-    	ipnum++;
-    	if(ipnum >= ips_length)
-    		ipnum = 0;
+        printf("error file %s \n", BUSLINECONF);
+        return threadargss;
     }
+    while(1)
+	{
+      // 加锁以判断文件是否已经被加锁了
+		if(flock(fileno(fp), LOCK_EX | LOCK_NB) == 0)
+		{
+			printf("file %s is unlock status \n", BUSLINECONF);
+    		while ((fgets (src, LINE_LENGTH, fp)) != NULL)
+			{
+    			str = src;
+    			int n = str.find_last_not_of(" \r\n\t");
+    			//std::cout << "src: "<< str << std::endl;
+    			if( n != string::npos )
+    			{
+    			    str.erase( n + 1 , str.size() - n );
+    			}
+    			std::vector<std::string> buslineinfo = cr.split(str, "---");
+    	    	if(buslineinfo.size() >= 6)
+    	    	{
+    	        	CthreadArgs threadargs;
+    	        	threadargs.m_curl = curl;
+    	        	threadargs.m_ip = ips[ipnum].m_ip;
+    	        	threadargs.m_port = ips[ipnum].m_port;
+    	        	threadargs.m_busterminus.m_beginTime = buslineinfo[0];
+    	    		threadargs.m_busterminus.m_endTime = buslineinfo[1];
+    	        	threadargs.m_busterminus.m_lineID = buslineinfo[2];
+    	        	threadargs.m_busterminus.m_lineName = buslineinfo[3];
+    	        	threadargs.m_busterminus.m_terminusId = buslineinfo[4];
+    	        	threadargs.m_busterminus.m_terminusName = buslineinfo[5];
+    	        	threadargss.push_back(threadargs);
+    	        	ipnum++;
+    	        	if(ipnum >= ips_length)
+    	        		ipnum = 0;
+    	    	}
+			}
+			fclose(fp);
+			flock(fileno(fp), LOCK_UN);
+			break;
+		}
+		else
+		{
+			printf("file %s is locked, please wait \n", BUSLINECONF);
+			sleep(1);
+		}
+	}
 
     return threadargss;
 }
 
 void* Cbusinfo::runUrl(void *arg)
 {
+	//LOG4CPLUS_DEBUG(ClogCPP::m_logger, "runUrl begin....");
 	CthreadArgs *threadargs = (CthreadArgs *)arg;
 
 	string url = "http://222.85.139.244:1001/BusService/QueryDetail_ByRouteID/?RouteID="
 			+threadargs->m_busterminus.m_lineID+"&SegmentID="+threadargs->m_busterminus.m_terminusId;
-	cout<<"<*****url*****>"<<url<<" "<<threadargs->m_ip<<":"<<threadargs->m_port<<endl;
+	//cout<<"<*****url*****>"<<url<<" "<<threadargs->m_ip<<":"<<threadargs->m_port<<endl;
 	string buslines_src;
 	CgetDataFromUrl getdata;
+	Cbusinfo bus;
+
+	int flag = bus.IsInTimeSpan(threadargs->m_busterminus.m_beginTime, threadargs->m_busterminus.m_endTime);
+	if(flag == -1)
+	{
+		//cout<<threadargs->m_busterminus.m_lineName<<" 公交车处于休息时间"<<endl;
+	    return NULL;
+	}
 	buslines_src = getdata.getBusInfoByUrl(threadargs->m_curl, url, threadargs->m_ip, threadargs->m_port, true); //set proxy
 	if(buslines_src.length() <= 0)
 	{
-		cout<<"set proxy false=====>\n";
+		//printf("set proxy ip: %s, port: %d false=====>\n", threadargs->m_ip.c_str(), threadargs->m_port);
 	    buslines_src = getdata.getBusInfoByUrl(threadargs->m_curl, url, threadargs->m_ip, threadargs->m_port, false); //not set proxy
 	}
 	//cout<<"<*****buslines_src*****>"<<buslines_src<<endl;
-	Cbusinfo bus;
 	vector<CBusPositionInfo> busPositionInfos = bus.getBusPositonInfo(threadargs->m_busterminus, buslines_src);
-	//cout<<"busPositionInfos size()=====>"<<busPositionInfos.size()<<endl;
-	LOG4CPLUS_DEBUG(ClogCPP::m_logger, "busPositionInfos size()=====>"+busPositionInfos.size());
+	//LOG4CPLUS_DEBUG(ClogCPP::m_logger, "busPositionInfos size()=====>"+busPositionInfos.size());
 
 	if(pthread_mutex_lock(&BACK_COMM_mutex)!=0)
 	{
-        printf("buslist BACK_COMM_mutex lock err !!\n");
+		printf("buslist pthread_mutex_lock err !!\n");
         return NULL;
 	}
 	if(busPositionInfos.size() != 0)
@@ -391,33 +493,36 @@ void* Cbusinfo::runUrl(void *arg)
 		printf("buslist pthread_mutex_unlock err !!\n");
 		return NULL;
     }
+	//LOG4CPLUS_DEBUG(ClogCPP::m_logger, "runUrl end....");
 	return NULL;
 }
 
 void Cbusinfo::runPthread(CpoolBuslist *buslistinfo)
 {
+	//LOG4CPLUS_DEBUG(ClogCPP::m_logger, "runPthread begin....");
     int urllines = buslistinfo->m_cbuslist->m_threadargss.size();
     Cthreadpool *thread_pool = buslistinfo->m_thread_pool;
-    cout<<"urllines===>"<<urllines<<endl;
+    //cout<<"urllines===>"<<urllines<<endl;
     buslistinfo->m_cbuslist->m_buslist.clear();
     time_t tt = time(NULL);
     tm* t1= localtime(&tt);
     char time1[100];
     sprintf(time1, "%d-%02d-%02d %02d:%02d:%02d\n", t1->tm_year + 1900,t1->tm_mon + 1,t1->tm_mday,t1->tm_hour,t1->tm_min,t1->tm_sec);
 
-    for (int i = 0; i < urllines; i++) {
+    for (int i = 0; i < urllines; i++)
+    {
     	buslistinfo->m_cbuslist->m_threadargss[i].m_buslist = &buslistinfo->m_cbuslist->m_buslist;
     	thread_pool->pool_add_worker (Cbusinfo::runUrl, &buslistinfo->m_cbuslist->m_threadargss[i]);
     }
-    sleep(2);
+    sleep(1);
     while(1)
     {
     	if(thread_pool->pool->cur_queue_size == 0)
     	{
+    		cout<<"====pool is empty=======\n";
     		break;
-    		cout<<"===========exit\n";
     	}
-    	sleep(2);
+    	sleep(1);
     	continue;
     }
     time_t tt1 = time(NULL);
@@ -426,6 +531,120 @@ void Cbusinfo::runPthread(CpoolBuslist *buslistinfo)
     sprintf(time2, "%d-%02d-%02d %02d:%02d:%02d\n", t2->tm_year + 1900,t2->tm_mon + 1,t2->tm_mday,t2->tm_hour,t2->tm_min,t2->tm_sec);
     cout<<"begin time: "<<time1;
     cout<<"end   time: "<<time2;
+    //LOG4CPLUS_DEBUG(ClogCPP::m_logger, "runPthread end....");
 }
+
+int Cbusinfo::IsInTimeSpan(string &begintime, string &endtime)
+{
+	Ccrawl cr;
+	vector<string> local_time = cr.split(begintime, ":");
+	if(local_time.size() < 2)
+	{
+		LOG4CPLUS_ERROR(ClogCPP::m_logger, "IsInTimeSpan error....");
+		return -1;
+	}
+
+	int begin_h = (atoi(local_time[0].c_str()) + 24 - 1) % 24; //-1
+	int begin_m = atoi(local_time[1].c_str());
+	local_time.clear();
+	local_time = cr.split(endtime, ":");
+	int end_h = (atoi(local_time[0].c_str()) + 2) % 24; //+2
+	int end_m = atoi(local_time[1].c_str());
+	time_t tt = time(NULL);
+	tm* t= localtime(&tt);
+    int now_h = t->tm_hour;
+    int now_m = t->tm_min;
+
+    int iBegLessThanEnd = 0;       // 1-配置的开始时间小于结束时间  0-配置的开始时间大于结束时间
+    int flag = 0;
+
+    if (begin_h < end_h || (begin_h == end_h && begin_m <= end_m))
+    {
+        iBegLessThanEnd = 1;
+    }
+    else
+    {
+        iBegLessThanEnd = 0;
+    }
+
+    if (iBegLessThanEnd)   // 开始时间小于结束时间
+    {
+         if ((now_h > begin_h || (now_h == begin_h && now_m >= begin_m))
+            && (now_h < end_h || (now_h == end_h && now_m <= end_m)))
+         {
+        	 flag = 0;
+         }
+         else
+         {
+        	 flag = -1;
+         }
+    }
+    else   // 开始时间大于结束时间, 跨天的情况
+    {
+         if ((now_h > begin_h || (now_h == begin_h && now_m >= begin_m))
+            || (now_h < end_h || (now_h == end_h && now_m <= end_m)))
+         {
+        	 flag = 0;
+         }
+         else
+         {
+        	 flag = -1;
+         }
+    }
+    //cout<<begin_h<<":"<<begin_m<<","<<end_h<<":"<<end_m<<","<<now_h<<":"<<now_m<<"==>"<<flag<<endl;
+    return flag;
+}
+
+void Cbusinfo::copyBusList(vector<CBusPositionInfo> &desc, const vector< vector<CBusPositionInfo> > &src)
+{
+	int desc_nums = src.size();
+	int desc_num;
+	for(int src_nums = 0; src_nums < desc_nums; ++src_nums)
+	{
+		desc_num = src[src_nums].size();
+		for(int src_num = 0; src_num < desc_num; ++src_num)
+		{
+			desc.push_back(src[src_nums][src_num]);
+		}
+	}
+}
+
+vector<CBusPositionInfo> Cbusinfo::checkNewBusList(const vector<CBusPositionInfo> &desc, const vector< vector<CBusPositionInfo> > &src)
+{
+	vector<CBusPositionInfo> newbuslist;
+
+	int desc_nums = src.size();
+	int desc_num;
+	for(int src_nums = 0; src_nums < desc_nums; ++src_nums)
+	{
+		desc_num = src[src_nums].size();
+		for(int src_num = 0; src_num < desc_num; ++src_num)
+		{
+			if(checkBusLineExist(src[src_nums][src_num], desc) == false)
+			{
+				newbuslist.push_back(src[src_nums][src_num]);
+			}
+		}
+	}
+	return newbuslist;
+}
+
+bool Cbusinfo::checkBusLineExist(CBusPositionInfo desc, const vector<CBusPositionInfo>  &src)
+{
+	int desc_num = src.size();
+	bool flag = false;
+	for(int src_num = 0; src_num < desc_num; ++src_num)
+	{
+		if(((src[src_num].m_Latitude - desc.m_Latitude >= -0.00001 && src[src_num].m_Latitude - desc.m_Latitude <= 0.00001)
+			|| (src[src_num].m_Longitude - desc.m_Longitude >= -0.00001 && src[src_num].m_Longitude - desc.m_Longitude <= 0.00001))
+			&& (src[src_num].m_busId == desc.m_busId))
+		{
+			flag = true;
+			break;
+		}
+	}
+	return flag;
+}
+
 
 

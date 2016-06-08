@@ -8,9 +8,12 @@ CLIENTOBJS=client.o
 #SERVEREXEC=server
 CLIENTEXEC=client
 
+DIR_UBUNTU15_LIB = ../lib/ubuntu15lib/*
+DIR_UBUNTU14_LIB = ../lib/ubuntu14lib/*
+
 all:$(SERVEROBJS) $(CLIENTOBJS)
 	#$(CC) -o $(SERVEREXEC) $(SERVEROBJS) -lzmq
-	$(CC) -o $(CLIENTEXEC) $(CLIENTOBJS)  -lzmq
+	$(CC) -o $(CLIENTEXEC) $(CLIENTOBJS) -lzmq
 	@echo '-------------ok--------------'
 
 .c.o:

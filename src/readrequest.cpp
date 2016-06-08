@@ -14,6 +14,7 @@ vector<string> CreadConf::readrequest(string &filename)
         //std::cout << "Read from file: " << str << std::endl;
     	headers.push_back(str);
     }
+    fin.close();
 	return headers;
 }
 

@@ -1,5 +1,5 @@
 #include "threadpool.h" 
-
+#include "common.h"
 
 Cthreadpool::Cthreadpool(int max_thread_num)
 {
@@ -32,6 +32,7 @@ void Cthreadpool::pool_init (int max_thread_num)
   
 int Cthreadpool::pool_add_worker (void *(*process) (void *arg), void*arg)
 {  
+	//LOG4CPLUS_DEBUG(ClogCPP::m_logger, "pool_add_worker begin....");
     CThread_worker *newworker = (CThread_worker *) malloc (sizeof(CThread_worker));
     newworker->process = process;  
     newworker->arg = arg;  
@@ -39,18 +40,21 @@ int Cthreadpool::pool_add_worker (void *(*process) (void *arg), void*arg)
   
     pthread_mutex_lock (&(pool->queue_lock));  
     CThread_worker *member = pool->queue_head;  
-    if (member != NULL) {  
+    if (member != NULL)
+    {
         while (member->next != NULL)  
             member = member->next;  
         member->next = newworker;  
     }  
-    else {  
+    else
+    {
         pool->queue_head = newworker;  
     }  
     assert (pool->queue_head != NULL);  
     pool->cur_queue_size++;  
     pthread_mutex_unlock (&(pool->queue_lock));  
     pthread_cond_signal (&(pool->queue_ready));  
+    //LOG4CPLUS_DEBUG(ClogCPP::m_logger, "pool_add_worker end....");
     return 0;  
 }  
   
@@ -66,7 +70,8 @@ int Cthreadpool::pool_destroy ()
     free (pool->threadid);  
   
     CThread_worker *head = NULL;  
-    while (pool->queue_head != NULL) {  
+    while (pool->queue_head != NULL)
+    {
         head = pool->queue_head;  
         pool->queue_head = pool->queue_head->next;  
         free (head);  
@@ -80,17 +85,24 @@ int Cthreadpool::pool_destroy ()
   
 void *Cthreadpool::thread_routine (void *arg)
 {  
+	//LOG4CPLUS_DEBUG(ClogCPP::m_logger, "thread_routine begin....");
     //printf ("starting thread 0x%x\n", (unsigned int)pthread_self ());
-    while (1) {  
+    while (1)
+    {
+    	//LOG4CPLUS_DEBUG(ClogCPP::m_logger, "thread_routine begin while....");
         pthread_mutex_lock (&(pool->queue_lock));  
-        while (pool->cur_queue_size == 0 && !pool->shutdown) {  
+        while (pool->cur_queue_size == 0 && !pool->shutdown)
+        {
             //printf ("thread 0x%lu is waiting\n", (unsigned long)pthread_self ());
+        	//LOG4CPLUS_DEBUG(ClogCPP::m_logger, "thread_routine waiting....");
             pthread_cond_wait (&(pool->queue_ready), &(pool->queue_lock));  
         }  
   
-        if (pool->shutdown) {  
+        if (pool->shutdown)
+        {
             pthread_mutex_unlock (&(pool->queue_lock));  
             //printf ("thread 0x%lu will exit\n", (unsigned long)pthread_self ());
+            //LOG4CPLUS_DEBUG(ClogCPP::m_logger, "thread_routine exit....");
             pthread_exit (NULL);  
         }  
   
@@ -106,7 +118,9 @@ void *Cthreadpool::thread_routine (void *arg)
         (*(worker->process)) (worker->arg);  
         free (worker);  
         worker = NULL;  
+        //LOG4CPLUS_DEBUG(ClogCPP::m_logger, "thread_routine end while....");
     }  
+    //LOG4CPLUS_DEBUG(ClogCPP::m_logger, "thread_routine end....");
     pthread_exit (NULL);  
 }  
 

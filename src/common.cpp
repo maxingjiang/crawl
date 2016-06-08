@@ -15,7 +15,7 @@ void ClogCPP::init()
 	LogLog::getLogLog()->setInternalDebugging(false);
 	try
 	{
-	     PropertyConfigurator::doConfigure(LOG4CPLUS_TEXT("conf/log4cplus.properties"));
+	     PropertyConfigurator::doConfigure(LOG4CPLUS_TEXT(LOG4CPLUSCONF));
 	     LOG4CPLUS_INFO(m_logger, "begin logging....");
 	 }
 	 catch(...)

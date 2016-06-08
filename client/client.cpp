@@ -1,4 +1,4 @@
-#include <zmq.h>
+#include "../include/zeromq/zmq.h"
 #include "stdio.h"
 #include <unistd.h>
 #include <string.h>
@@ -20,12 +20,14 @@ int main(int argc, char * argv[])
         return 0;
     }
     //创建socket 
-    if((pSock = zmq_socket(pCtx, ZMQ_DEALER)) == NULL)
+    if((pSock = zmq_socket(pCtx, ZMQ_SUB)) == NULL)
     {
         zmq_ctx_destroy(pCtx);
         return 0;
     }
     int iSndTimeout = 60000;// millsecond
+    //设置过滤器，不然接收不到数据
+    zmq_setsockopt (pSock, ZMQ_SUBSCRIBE, "", 0);
     //设置接收超时 
     if(zmq_setsockopt(pSock, ZMQ_RCVTIMEO, &iSndTimeout, sizeof(iSndTimeout)) < 0)
     {

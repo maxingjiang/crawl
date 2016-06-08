@@ -8,7 +8,7 @@
 #ifndef INCLUDE_RUNSOCKET_H_
 #define INCLUDE_RUNSOCKET_H_
 
-#include <zmq.h>
+#include "zeromq/zmq.h"
 #include "stdio.h"
 #include <iostream>
 #include <string>
@@ -32,6 +32,7 @@ public:
 private:
 	void * m_pCtx;
 	void * m_pSock;
+	int m_rc;
     const char * m_pAddr;
     Cthreadpool *m_thread_pool;
     CBusLists *m_cbuslist;
