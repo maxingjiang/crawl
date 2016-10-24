@@ -1,0 +1,441 @@
+
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>alphago_搜帖子_天涯社区</title>
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<meta name="generator" content="www.tianya.cn" />
+<link href="http://static.tianyaui.com/global/ty/TY.css"
+	rel="stylesheet" type="text/css" />
+<link href="http://static.tianyaui.com/global/search/web/static/css/search_5ab53e5.css" rel="stylesheet" type="text/css" />
+<link rel="shortcut icon" href="http://static.tianyaui.com/favicon.ico"
+	type="image/vnd.microsoft.icon" />
+<script type="text/javascript" charset="utf-8"
+	src="http://static.tianyaui.com/global/ty/TY.js"></script>
+</head>
+<body>
+	<script type="text/javascript" charset="utf-8">
+		TY.loader("TY.ui.nav", function() {
+			TY.ui.nav.init({
+				topNavWidth : 1000,
+				showBottomNav : false
+			});
+		});
+	</script>
+	
+
+<div id="doc">
+<div id="hd"></div>
+<div id="bd" class="layout-lmr clearfix">
+<div id="left">
+<!-- 左侧菜单 -->
+<!--  -->
+<a class="leftLogo" href="/"  title="回到搜索首页"></a>
+
+<ul class="tagSort left-mod">
+<li class=hover id=search_bbs><a href="bbs?q=alphago" class="l2">帖子</a></li>
+
+	<li class="tiezi">
+	<div class=on><a href="bbs?q=alphago&f=0">按相关度</a></div>
+	<div ><a href="bbs?q=alphago&s=4&f=0">按发帖时间</a></div>
+	<div ><a href="bbs?q=alphago&s=6&f=0">按最新回复时间</a></div>
+	<div ><a href="bbs?q=alphago&s=10&f=0">按回复数</a></div>
+	<div ><a href="bbs?q=alphago&s=8&f=0">按点击数</a></div>
+	<div class=on><a href="bbs?q=alphago&s=0&f=0">搜索全文</a></div>
+	<div ><a href="bbs?q=alphago&s=0&f=3">搜索标题</a></div>
+	<div ><a href="bbs?q=alphago&s=0&f=2">搜索作者</a></div>
+	</li>
+	
+	
+<li  id=search_wenda><a href="wenda?q=alphago" class="l6">问答</a></li>
+
+<li  id=search_t><a href="t?q=alphago" class="l3">微博</a></li>
+<li  id=search_blog ><a href="blog?q=alphago" class="l4">博文</a></li>
+	
+<li  id=search_user><a href="user?q=alphago" class="l5">找人</a></li>
+<!-- <li  id=search_app><a href="app?q=alphago" class="l7">应用</a></li>  -->
+</ul>
+</div>
+<div id="right" class="searchRight">
+<!-- 相关版块 begin -->
+
+<!-- 相关版块 end -->
+<!-- 相关用户 begin -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section section1">
+	<div class="hd clearfix">
+		<h2>
+			相关用户
+		</h2>
+	</div>
+	<div class="bd">
+		<ul class="user-list">
+			
+			<li class="clearfix">
+				<div class="headbox">
+					<div class="head50">
+						<a target=_blank
+							href="http://www.tianya.cn/109946005"><img
+								src="http://tx.tianyaui.com/logo/small/109946005" />
+						</a>
+					</div>
+				</div>
+				<p class="text">
+					<a target=_blank
+						href="http://www.tianya.cn/109946005"><span class="kwcolor">AlphaGo</span></a>
+				</p>
+				<p class="desc">
+					粉丝数2人
+				</p>
+				<p>
+					<a _data="109946005" class="t-setfocus"
+						href="javascript:void(0);"></a>
+				</p>
+			</li>
+			
+			<li class="clearfix">
+				<div class="headbox">
+					<div class="head50">
+						<a target=_blank
+							href="http://www.tianya.cn/113273693"><img
+								src="http://tx.tianyaui.com/logo/small/113273693" />
+						</a>
+					</div>
+				</div>
+				<p class="text">
+					<a target=_blank
+						href="http://www.tianya.cn/113273693"><span class="kwcolor">alphaGo</span>2046</a>
+				</p>
+				<p class="desc">
+					粉丝数2人
+				</p>
+				<p>
+					<a _data="113273693" class="t-setfocus"
+						href="javascript:void(0);"></a>
+				</p>
+			</li>
+			
+			<li class="clearfix">
+				<div class="headbox">
+					<div class="head50">
+						<a target=_blank
+							href="http://www.tianya.cn/110111870"><img
+								src="http://tx.tianyaui.com/logo/small/110111870" />
+						</a>
+					</div>
+				</div>
+				<p class="text">
+					<a target=_blank
+						href="http://www.tianya.cn/110111870"><span class="kwcolor">alphago</span>110</a>
+				</p>
+				<p class="desc">
+					粉丝数1人
+				</p>
+				<p>
+					<a _data="110111870" class="t-setfocus"
+						href="javascript:void(0);"></a>
+				</p>
+			</li>
+			
+			<li class="more">
+				<a href="user?q=alphago">更多&gt;&gt;</a>
+			</li>
+		</ul>
+	</div>
+	<div class="ft"></div>
+</div>
+
+<!-- 相关用户 end -->
+<!-- 打赏牛人 begin -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 打赏牛人 end -->
+<!-- 相关应用 begin -->
+
+
+<!-- 相关应用 end -->
+</div>
+<div id="main">
+
+
+
+<div class="searchTop searchBbs"> 
+<div class="souTianya">
+<form method="get" action="bbs"  >
+<!--
+
+-->
+
+
+<div class="searchMbd">
+<input id="search_page_text" name=q type="text" class="searchText" value="alphago" />
+
+
+<div id="selInputCnt" class="selInputCnt">
+<input type="text" autocomplete="off" maxlength="8" id="selInput" class="selInput" value="全部版块"/>
+<input type="hidden" id="selInputVal" name="pid" value=""/>
+</div>
+
+
+<input type="submit" class="sousuo" value="搜索" />
+</div>
+
+
+<div class="hotTag">
+<a href=bbs?q=%E5%B1%A0%E5%91%A6%E5%91%A6>屠呦呦</a>
+<a href=bbs?q=%E6%AC%A7%E5%86%A0>欧冠</a>
+<a href=bbs?q=%E4%BA%91%E4%B8%AD%E6%AD%8C>云中歌</a>
+<a href=bbs?q=fb%E8%A1%A8%E6%83%85%E5%8C%85%E5%A4%A7%E6%88%98>fb表情包大战</a>
+<a href=bbs?q=%E7%AC%91%E8%AF%9D>笑话</a>
+<a href=http://book.tianya.cn/m/story.jsp?id=78351&f=a>婚内错爱</a>
+<a class="ml30" href="search_rank">&lt;&lt; 更多</a>
+
+</div>
+
+</form>
+
+
+</div>
+</div>
+
+<!-- data list begin -->
+<div class="searchListOne">
+<ul>
+
+
+		<li>
+		<div>
+		<h3><a href="http://bbs.tianya.cn/post-worldlook-1627191-1.shtml" target="_blank" >立帖为证,谷歌<span class="kwcolor">alphaGO</span>三月份将完胜围棋九段李世石</a></h3>
+		<p>理由如下: 1 <span class="kwcolor">alphaGO</span>战胜职业二段樊麾(欧洲围棋冠军),已经完全不同于以往的程序,以前任何一个 程序退役职业棋手可以让程序5个子。这不是关键,关键是程序下棋时会有严重失误,被职业 棋</p>
+		</div>
+		<p class="source">来自：<a href="http://bbs.tianya.cn/list-worldlook-1.shtml" target="_blank">国际观察</a>
+		作者：<a href="http://www.tianya.cn/42670362" target="_blank">joelry</a>
+		时间：<span>2016-02-09 16:33</span>
+		回复：<span>964</span></p><a class="reply-btn" href=/bbs_reply?q=alphago&s=4&pid=worldlook&tid=1627191>回复搜索</a>
+
+		
+		</li>
+	
+		<li>
+		<div>
+		<h3><a href="http://bbs.tianya.cn/post-free-5403932-1.shtml" target="_blank" >谷歌<span class="kwcolor">AlphaGo</span>战胜李世石,人工智能崛起,将人类文明推向灭顶之灾</a></h3>
+		<p>日,谷歌围棋<span class="kwcolor">AlphaGo</span>战胜韩国棋手李世石,标志着一个新纪元的到来,但这是一个黑暗的纪元——人工智能统治世界的开端。这个日子类似于《终结者》里面的审判日,必将载入人类文明终结,人工</p>
+		</div>
+		<p class="source">来自：<a href="http://bbs.tianya.cn/list-free-1.shtml" target="_blank">天涯杂谈</a>
+		作者：<a href="http://www.tianya.cn/102919114" target="_blank">徐德文</a>
+		时间：<span>2016-03-10 10:43</span>
+		回复：<span>141</span></p><a class="reply-btn" href=/bbs_reply?q=alphago&s=4&pid=free&tid=5403932>回复搜索</a>
+
+		
+		</li>
+	
+		<li>
+		<div>
+		<h3><a href="http://bbs.tianya.cn/post-worldlook-1640788-1.shtml" target="_blank" >打败李世石的<span class="kwcolor">AlphaGo</span>揭掉了魔鬼的封印(转载)</a></h3>
+		<p> <span class="kwcolor">AlphaGo</span>打败李世石是人工智能发展史上的里程碑事件,未来数年到数十年内,它的意义将逐渐显现。它打开了人类通向天堂——抑或是地狱之门。</p>
+		</div>
+		<p class="source">来自：<a href="http://bbs.tianya.cn/list-worldlook-1.shtml" target="_blank">国际观察</a>
+		作者：<a href="http://www.tianya.cn/75866405" target="_blank">动力阿剑</a>
+		时间：<span>2016-03-11 08:49</span>
+		回复：<span>85</span></p><a class="reply-btn" href=/bbs_reply?q=alphago&s=4&pid=worldlook&tid=1640788>回复搜索</a>
+
+		
+		</li>
+	
+		<li>
+		<div>
+		<h3><a href="http://bbs.tianya.cn/post-worldlook-1640588-1.shtml" target="_blank" >李世石缺乏大智慧,把<span class="kwcolor">AlphaGO</span>当成9段棋手,你当然赢不了!</a></h3>
+		<p>戏太深,真把<span class="kwcolor">AlphaGO</span>当做9段棋手,认认真真的努力走好每一步,极少在局部不明的情况下脱先主动转移战场。昨天开局不久就在右上角下重手,结果无法脱身,由纠缠在一起的几块棋蔓延全局,正好</p>
+		</div>
+		<p class="source">来自：<a href="http://bbs.tianya.cn/list-worldlook-1.shtml" target="_blank">国际观察</a>
+		作者：<a href="http://www.tianya.cn/86073529" target="_blank">峨眉大侠来了</a>
+		时间：<span>2016-03-10 18:58</span>
+		回复：<span>87</span></p><a class="reply-btn" href=/bbs_reply?q=alphago&s=4&pid=worldlook&tid=1640588>回复搜索</a>
+
+		
+		</li>
+	
+		<li>
+		<div>
+		<h3><a href="http://bbs.tianya.cn/post-no01-509003-1.shtml" target="_blank" ><span class="kwcolor">alphago</span>与文科生是相互促进的关系,不存在竞争关系</a></h3>
+		<p> <span class="kwcolor">alphago</span>与文科生是相互促进的关系,不存在竞争关系 <span class="kwcolor">alphago</span>与文科生是竞争关系?文科生要战胜人工智能?人工智能要战胜文科生? 大错特错。人工智能起到的社会学意义是‘劳动力替代’。</p>
+		</div>
+		<p class="source">来自：<a href="http://bbs.tianya.cn/list-no01-1.shtml" target="_blank">关天茶舍</a>
+		作者：<a href="http://www.tianya.cn/6997788" target="_blank">从人者108</a>
+		时间：<span>2016-03-14 09:45</span>
+		回复：<span>101</span></p><a class="reply-btn" href=/bbs_reply?q=alphago&s=4&pid=no01&tid=509003>回复搜索</a>
+
+		
+		</li>
+	
+		<li>
+		<div>
+		<h3><a href="http://bbs.tianya.cn/post-itinfo-471140-1.shtml" target="_blank" >如果让<span class="kwcolor">Alphago</span>去骑行,它会选雅迪Z3,还是M1(转载)</a></h3>
+		<p> 说起<span class="kwcolor">Alphago</span>这个名字,可能大家不清楚它是谁,但如果说它就是在今年上半年成功击败韩国九段棋手李世石,引起了全世界关注的那台智能电脑,相信大家肯定有所耳闻。 作为人工智能的代表, A</p>
+		</div>
+		<p class="source">来自：<a href="http://bbs.tianya.cn/list-itinfo-1.shtml" target="_blank">ＩＴ视界</a>
+		作者：<a href="http://www.tianya.cn/112763961" target="_blank">缪痘沃恼</a>
+		时间：<span>2016-06-24 12:42</span>
+		回复：<span>41</span></p><a class="reply-btn" href=/bbs_reply?q=alphago&s=4&pid=itinfo&tid=471140>回复搜索</a>
+
+		
+		</li>
+	
+		<li>
+		<div>
+		<h3><a href="http://bbs.tianya.cn/post-stocks-1695747-1.shtml" target="_blank" ><span class="kwcolor">AlphaGo</span>再胜人类,浙大管院教授详解人工智能与人类的未来</a></h3>
+		<p>“谷歌机器人<span class="kwcolor">AlphaGo</span>在围棋‘人机世界大战’中两次战胜围棋世界冠军、韩国名将李世石”的消息刷爆了无数人的朋友圈,大家纷纷表示:“人类迎来了发展史上又一个重要时刻,一个新的时代已</p>
+		</div>
+		<p class="source">来自：<a href="http://bbs.tianya.cn/list-stocks-1.shtml" target="_blank">股市论谈</a>
+		作者：<a href="http://www.tianya.cn/109799271" target="_blank">白色拖鞋饶</a>
+		时间：<span>2016-03-14 10:58</span>
+		回复：<span>22</span></p><a class="reply-btn" href=/bbs_reply?q=alphago&s=4&pid=stocks&tid=1695747>回复搜索</a>
+
+		
+		</li>
+	
+		<li>
+		<div>
+		<h3><a href="http://bbs.tianya.cn/post-worldlook-1648161-1.shtml" target="_blank" >秋波媚媚: <span class="kwcolor">AlphaGo</span>是条装逼狗(转载)</a></h3>
+		<p>围棋人工智能<span class="kwcolor">AlphaGo</span>与韩国棋手李世石下围棋。李世石最后以1-4输掉了这场人机大战。 如果我讲李世石拿黑钱了吧,那是太看得起李世石了。如果我讲李世石没拿黑钱吧,这是侮辱我的智商了</p>
+		</div>
+		<p class="source">来自：<a href="http://bbs.tianya.cn/list-worldlook-1.shtml" target="_blank">国际观察</a>
+		作者：<a href="http://www.tianya.cn/9606246" target="_blank">江南雨后山</a>
+		时间：<span>2016-03-28 17:16</span>
+		回复：<span>22</span></p><a class="reply-btn" href=/bbs_reply?q=alphago&s=4&pid=worldlook&tid=1648161>回复搜索</a>
+
+		
+		</li>
+	
+		<li>
+		<div>
+		<h3><a href="http://bbs.tianya.cn/post-worldlook-1643066-1.shtml" target="_blank" ><span class="kwcolor">AlphaGo</span>的明天,如果拿下柯洁是否就可以无敌了?</a></h3>
+		<p> 前一天<span class="kwcolor">AlphaGo</span>输了一盘,本来以为人类终于找到了系统的bug(怎么没人拔电源),或者程序的脑子计算已经跟不上人类的程度,今天就又来了一场4:1,然后还被人调侃成<span class="kwcolor">AlphaGo</span>放水了(李世石不得</p>
+		</div>
+		<p class="source">来自：<a href="http://bbs.tianya.cn/list-worldlook-1.shtml" target="_blank">国际观察</a>
+		作者：<a href="http://www.tianya.cn/108644899" target="_blank">轻狂校生2016</a>
+		时间：<span>2016-03-16 14:02</span>
+		回复：<span>40</span></p><a class="reply-btn" href=/bbs_reply?q=alphago&s=4&pid=worldlook&tid=1643066>回复搜索</a>
+
+		
+		</li>
+	
+		<li>
+		<div>
+		<h3><a href="http://bbs.tianya.cn/post-worldlook-1642642-1.shtml" target="_blank" >估计谷歌要降低<span class="kwcolor">AlphaGo</span>的运算速度</a></h3>
+		<p> 本来推出<span class="kwcolor">AlphaGo</span>是要给世界一个下马威,让世界顶礼膜拜,但是除了让洋奴跪舔外,却激起了中国人的进取心,要大力发展人工智能,这会对美国的人工智能造成挑战,所以为了弱化中国的竞争心,</p>
+		</div>
+		<p class="source">来自：<a href="http://bbs.tianya.cn/list-worldlook-1.shtml" target="_blank">国际观察</a>
+		作者：<a href="http://www.tianya.cn/47064167" target="_blank">唯物主义思想家</a>
+		时间：<span>2016-03-15 14:40</span>
+		回复：<span>29</span></p><a class="reply-btn" href=/bbs_reply?q=alphago&s=4&pid=worldlook&tid=1642642>回复搜索</a>
+
+		
+		</li>
+	
+<li id=search_msg style="display:none"></li>
+
+</ul>
+</div>
+<!-- data list end -->    
+<!-- pagination begin --> 
+<script type="text/javascript">
+var pageFormQ=document.getElementById("search_page_text").value;
+function go(pg){
+	
+	if(document.getElementById("search_msg")!=null ){
+		//document.getElementById("search_msg").innerHTML='<font  color=green>数据读取中，请稍候……</font>';
+		//document.getElementById("search_msg").style.display="block";
+	}
+	document.getElementById("pageFormQ").value=pageFormQ;
+	document.getElementById("pn").value=pg;
+	document.getElementById("pageForm").submit();
+}
+</script>
+
+	<form id=pageForm name=pageForm method=get action="">
+	<input type=hidden id=pageFormQ name="q" value="" />
+	<input type=hidden id=pn name=pn  >
+	
+	
+	
+	
+	
+	</form>   
+	<div class="long-pages">
+	<em>共有381 条内容</em>
+	
+	<span>上一页</span>
+<strong>1</strong>
+<a href='javascript:go(2);'>2</a>
+<a href='javascript:go(3);'>3</a>
+<a href='javascript:go(4);'>4</a>
+<a href='javascript:go(5);'>5</a>
+<a href='javascript:go(6);'>6</a>
+…
+<a href='javascript:go(39);'>39</a>
+<a href='javascript:go(2);'>下一页</a>
+ 
+		
+	</div>
+
+<!-- pagination end -->    
+</div>
+</div>
+<div id="ft"></div>
+<!-- div id="search_result_downbanner_950_90"> </div  -->
+</div>
+<script type="text/javascript" src="http://static.tianyaui.com/global/search/web/static/js/search_7ee0240.js" charset="utf-8" ></script>
+    <div id="foot">
+        <P>
+			<A href="http://help.tianya.cn/about/about.html" rel="nofollow" target=_blank>关于天涯</A> |
+			<A href="http://help.tianya.cn/about/service.html" rel="nofollow" target=_blank>广告服务</A> |
+			<A href="http://open.tianya.cn" rel="nofollow" target=_blank>开放平台</A> |
+			<A href="http://service.tianya.cn/" rel="nofollow" target=_blank>天涯客服</A> |
+			<A href="http://help.tianya.cn/about/ystl.html" rel="nofollow" target=_blank>隐私和版权</A> |
+			<A href="http://help.tianya.cn/about/contact.html" rel="nofollow" target=_blank>联系我们</A> |
+			<A href="http://join.tianya.cn" rel="nofollow" target=_blank>加入天涯</A> |
+			<A href="http://www.tianya.cn/mobile/" rel="nofollow" target=_blank>手机版</A> |
+			<A href="http://service.tianya.cn/jbts.html" rel="nofollow" target=_blank>举报投诉</A>
+		</P>
+    <P class="copyright">&copy; 1999 - 2016 天涯社区 </P>
+    </div>
+</body>
+<script type="text/javascript" charset="GBK" src="http://static.tianyaui.com/global/ty/stat/stat_20080313.js"></script>
+<script type="text/javascript">
+	(function() {
+		var bd = document.createElement('script'); bd.type = 'text/javascript'; bd.async = true;
+		bd.src = 'http://hm.baidu.com/h.js?bc5755e0609123f78d0e816bf7dee255';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(bd, s);
+	})();
+</script>
+</html>

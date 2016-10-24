@@ -1,0 +1,12 @@
+Host: www.douban.com
+Connection: keep-alive
+Cache-Control: max-age=0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36
+Referer: https://www.baidu.com/link?url=sebLrG1S6LaDf4Z56EeNVSCaL3effLJLaYb0KmYEpWm&wd=&eqid=e2ec0cc7000370e9000000065768fe3b
+Accept-Encoding: gzip, deflate, sdch, br
+Accept-Language: zh-CN,zh;q=0.8
+Cookie: ll="118339"; bid=JaL-cJ4Oh64; _pk_ref.100001.8cb4=%5B%22%22%2C%22%22%2C1466508001%2C%22https%3A%2F%2Fwww.baidu.com%2Flink%3Furl%3DsebLrG1S6LaDf4Z56EeNVSCaL3effLJLaYb0KmYEpWm%26wd%3D%26eqid%3De2ec0cc7000370e9000000065768fe3b%22%5D; _pk_id.100001.8cb4=46e00139ddbbbcf7.1466498633.2.1466508001.1466498633.; _pk_ses.100001.8cb4=*
+
+

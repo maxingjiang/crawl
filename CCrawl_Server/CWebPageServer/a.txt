@@ -1,0 +1,362 @@
+{
+    "RuleRoot": {
+        "ruleName": "new-fenghuang", 
+        "ruleDescription": "凤凰网新闻正文内容提取规则...", 
+        "testUrl": "http://news.ifeng.com/a/20160907/49928247_0.shtml", 
+        "ruleType": {
+            "pageType": 0, 
+            "pageCodeSource": 1
+        }, 
+        "copyrightProtection": {
+            "protectFlag": 1, 
+            "ruleAuthor": "yangcheng", 
+            "copyrightId": "20160822144653", 
+            "contectInfo": "phone:0851-12345678,QQ:854073071", 
+            "trialCount": 100
+        }, 
+        "ruleMatchInfo": {
+            "matchFlag": 0, 
+            "urlInclude": "", 
+            "urlNotInclude": "", 
+            "codeInclude": "", 
+            "codeNotInclude": ""
+        }, 
+        "validArea": {
+            "obtainCode": [
+                [ 
+                    {
+					    "count": 1,
+                        "tag": "body", 
+                        "attributes": null
+                    }, 
+                    {
+						"count": 1,
+                        "tag": "div", 
+                        "attributes": [
+                            {
+                                "attrName": "class", 
+                                "value": "main"
+                            }
+                        ]
+                    },
+                    {
+						"count": 1,
+                        "tag": "div",
+                        "attributes": [
+                            {
+                                "attrName": "class",
+                                "value": "left"
+                            }
+                        ]
+                    },
+                    {
+						"count": 1,
+                        "tag": "div",
+                        "attributes": [
+                            {
+                                "attrName": "id",
+                                "value": "artical"
+                            }
+                        ]
+                    }
+                ]
+            ]
+        }, 
+        "firstContentArea": {
+            "obtainCode": null
+        }, 
+        "unitArea": {
+            "obtainCode": null
+        }, 
+        "titleRule": {
+            "obtainCode": [
+                [
+                    {
+						"count": 1,
+                        "tag": "h1", 
+                        "attributes": [
+                            {
+                                "attrName": "id", 
+                                "value": "artical_topic"
+                            }
+                        ]
+                    }
+                ]
+            ]
+        }, 
+        "contentRule": {
+            "obtainCode": [
+                [
+                    {
+						"count": 1,
+                        "tag": "div", 
+                        "attributes": [
+                            {
+                                "attrName": "id", 
+                                "value": "artical_real"
+                            }, 
+                            {
+                                "attrName": "class", 
+                                "value": "js_img_share_area"
+                            }
+                        ]
+                    }, 
+                    {
+						"count": 1,
+                        "tag": "div", 
+                        "attributes": [
+                            {
+                                "attrName": "id", 
+                                "value": "main_content"
+                            },
+                            {
+                                "attrName": "class",
+                                "value": "js_selection_area"
+                            }
+						]
+                    }
+                ]
+            ]
+        }, 
+        "authorRule": {
+            "obtainCode": [
+                [
+                    {
+						"count": 1,
+                        "tag": "div", 
+                        "attributes": [
+                            {
+                                "attrName": "id", 
+                                "value": "artical_sth"
+                            },
+							{
+								"attrName": "class", 
+                                "value": "clearfix"
+							}
+                        ]
+                    }, 
+                    {
+						"count": 1,
+                        "tag": "p", 
+                        "attributes": [
+                            {
+                                "attrName": "class", 
+                                "value": "p_time"
+                            }
+                        ]
+                    }, 
+                    {
+						"count": 1,
+                        "tag": "span", 
+                        "attributes": [
+                            {
+                                "attrName": "class", 
+                                "value": "ss04"
+                            }
+                        ]
+                    }
+                ]
+            ]
+        }, 
+        "keywordRule": {
+            "obtainCode": [
+                [
+                    {
+						"count": 1,
+                        "tag": "div", 
+                        "attributes": [
+                            {
+                                "attrName": "id", 
+                                "value": "wrapOuter"
+                            }, 
+                            {
+                                "attrName": "class", 
+                                "value": "content_wraper wrap-outer"
+                            }
+                        ]
+                    }, 
+                    {
+						"count": 1,
+                        "tag": "div", 
+                        "attributes": [
+                            {
+                                "attrName": "class", 
+                                "value": "content_wraper_left"
+                            }
+                        ]
+                    }, 
+                    {
+						"count": 1,
+                        "tag": "div", 
+                        "attributes": [
+                            {
+                                "attrName": "class", 
+                                "value": "content-bottom"
+                            }
+                        ]
+                    }, 
+                    {
+						"count": 1,
+                        "tag": "p", 
+                        "attributes": [
+                            {
+                                "attrName": "class", 
+                                "value": "art-keywords"
+                            }
+                        ]
+                    }, 
+                    {
+						"count": 1,
+                        "tag": "a", 
+                        "attributes": null
+                    }
+                ]
+            ]
+        }, 
+        "classifyRule": {
+            "obtainCode": null
+        }, 
+        "headPicRule": {
+            "obtainCode": null
+        }, 
+        "minPicRule": {
+            "obtainCode": null
+        }, 
+        "flipPageArea": {
+            "obtainCode": null
+        }, 
+        "nextPageRule": {
+            "obtainCode": null
+        }, 
+        "contentFlipPageArea": {
+            "obtainCode": null
+        }, 
+        "contentNextPageRule": {
+            "obtainCode": [
+                [
+                    {
+						"count": 1,
+                        "tag": "div", 
+                        "attributes": [
+                            {
+                                "attrName": "class", 
+                                "value": "an"
+                            }
+                        ]
+                    }, 
+                    {
+						"count": 1,
+                        "tag": "div", 
+                        "attributes": [
+                            {
+                                "attrName": "class", 
+                                "value": "next "
+                            }
+						]
+                    }, 
+                    {
+						"count": 1,
+                        "tag": "div", 
+                        "attributes": [
+                            {
+                                "attrName": "class", 
+                                "value": "nextWrap"
+                            }
+						]
+                    }, 
+                    {
+						"count": 1,
+                        "tag": "div", 
+                        "attributes": [
+                            {
+                                "attrName": "class", 
+                                "value": "clearfix"
+                            }
+						]
+                    }, 
+                    {
+						"count": 1,
+                        "tag": "table", 
+                        "attributes": null
+                    },
+                    {
+						"count": 1,
+						"tag": "tbody",
+						"attributes": null
+					},					
+                    {
+						"count": 1,
+                        "tag": "tr", 
+                        "attributes": null
+                    }, 
+                    {
+						"count": 3,
+                        "tag": "td", 
+                        "attributes": null
+                    }, 
+                    {
+						"count": 1,
+                        "tag": "span", 
+                        "attributes": [
+                            {
+                                "attrName": "class", 
+                                "value": "btn"
+                            }
+						]
+                    }, 
+                    {
+						"count": 1,
+                        "tag": "a", 
+                        "attributes": [
+                            {
+                                "attrName": "id", 
+                                "value": "pagenext"
+                            }
+						]
+                    }
+                ]
+            ]
+        }, 
+        "customRuleList": [
+            {
+                "itemName": "时间", 
+                "helpInfo": "文章发布时间", 
+                "extractObject": 0, 
+                "obtainCode": [
+                    [
+                        {
+							"count": 1,
+                            "tag": "div", 
+                            "attributes": [
+                                {
+                                    "attrName": "id", 
+                                    "value": "page-tools"
+                                }
+                            ]
+                        }, 
+                        {
+							"count": 1,
+                            "tag": "span", 
+                            "attributes": [
+                                {
+                                    "attrName": "class", 
+                                    "value": "time-source"
+                                }
+                            ]
+                        }, 
+                        {
+							"count": 1,
+                            "tag": "span", 
+                            "attributes": [
+                                {
+                                    "attrName": "class", 
+                                    "value": "titer"
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    }
+}

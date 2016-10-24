@@ -1,0 +1,12 @@
+Host: www.zhihu.com
+Connection: keep-alive
+Cache-Control: max-age=0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36
+Referer: https://www.zhihu.com/
+Accept-Encoding: gzip, deflate, sdch, br
+Accept-Language: zh-CN,zh;q=0.8
+Cookie: q_c1=a17ee61511b64fab97421ef4e4d5d2e5|1466497813000|1466497813000; _xsrf=aa7595ee75e84e88564943eb0b37899f; l_cap_id="MmNkYmYyOTY0OTZiNGYzNzhjODJjZDUzNjQ4YTcwNzk=|1466497813|5d2d773fb4676ecd4905854f6c9982a79fd2aa5f"; cap_id="Zjk1NmMzYjkwMjkxNGFjMGJlMWZiN2JiYmMzMTZmNzQ=|1466497813|39bf86aa9fe6a741cfde82babc423df2b34527b6"; _za=e8a68c05-edc5-41ca-8196-153eedc0fa66; d_c0="ABBAB9-YHAqPTmZS704SNUC46RoA4_6WmIA=|1466497814"; _zap=31f97c17-5f23-463f-9638-b4547f944e92; login="MjYyNDI3Yjg4NGU5NDZmYWE2ZGViMzVmYWZiMjI0ZDU=|1466497819|b3dba975ae7bf4ccb063d07b527990e8e06494f7"; a_t="2.0AADA_c8YAAAXAAAAG4iQVwAAwP3PGAAAABBAB9-YHAoXAAAAYQJVTRuIkFcAzvM2uuOZJ5TRPDVUAfUryL-pwqXR_282iGf4e0O5rfw6QbgYNwoSxw=="; z_c0=Mi4wQUFEQV9jOFlBQUFBRUVBSDM1Z2NDaGNBQUFCaEFsVk5HNGlRVndETzh6YTY0NWtubE5FOE5WUUI5U3ZJdjZuQ3BR|1466497819|51141937adc42a99753c17a2ce614de6f6e3526b; n_c=1
+
+

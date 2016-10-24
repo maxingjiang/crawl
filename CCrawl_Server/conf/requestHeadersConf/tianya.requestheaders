@@ -1,0 +1,12 @@
+Host: bbs.tianya.cn
+Connection: keep-alive
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36
+Referer: https://www.baidu.com/
+Accept-Encoding: gzip, deflate, sdch
+Accept-Language: zh-CN,zh;q=0.8
+Cookie: __cid=86; __guid=387612945; __guid2=2079853872; bc_exp=10; bc_ids_m=wn; Hm_lvt_80579b57bf1b16bdf88364b13221a8bd=1466418279,1466497653; Hm_lpvt_80579b57bf1b16bdf88364b13221a8bd=1466497653; __u_a=v2.2.0; Hm_lvt_bc5755e0609123f78d0e816bf7dee255=1466497648,1466497659,1466497672,1466497693; Hm_lpvt_bc5755e0609123f78d0e816bf7dee255=1466497693; time=ct=1466497693.095; __ptime=1466497693146; __asc=3dace87d15572124479889365ea; __auc=3dace87d15572124479889365ea
+If-Modified-Since: Tue, 21 Jun 2016 08:22:25 GMT
+
+
